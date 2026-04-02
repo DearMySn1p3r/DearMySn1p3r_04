@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCH_LOG_SYSTEM_v8.3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ARCH_LOG_SYSTEM_v9.0</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Noto+Sans+KR:wght@300;700&family=Noto+Serif+KR:wght@300;700&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Gothic:wght@400;700&display=swap">
     <style>
@@ -44,9 +44,9 @@
             flex-wrap: wrap; 
             justify-content: center;
             align-items: flex-start;
-            padding: 50px 20px;
+            padding: 40px 20px;
             min-height: 100vh;
-            gap: 40px;
+            gap: 30px;
             box-sizing: border-box;
             transition: background-color 0.3s, color 0.3s;
         }
@@ -54,8 +54,8 @@
         /* 다크모드 토글 버튼 */
         .theme-toggle-btn {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             background: var(--bg-card);
             border: 1px solid var(--border-card);
             color: var(--text-main);
@@ -78,16 +78,17 @@
            왼쪽: 컨트롤 패널
         ----------------------------------- */
         .control-panel {
-            flex: 1 1 400px;
+            flex: 1 1 350px;
+            min-width: 0; /* 화면 밖으로 삐져나가는 현상 방지 */
             max-width: 480px;
             background: var(--bg-card);
             border-radius: 16px;
-            padding: 30px;
+            padding: 25px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             border: 1px solid var(--border-card);
             display: flex;
             flex-direction: column;
-            gap: 18px;
+            gap: 15px;
             box-sizing: border-box;
             transition: background-color 0.3s, border-color 0.3s;
         }
@@ -115,10 +116,10 @@
         }
 
         /* 폰트 선택 그리드 */
-        .font-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .font-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
         .btn-font {
             background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-muted);
-            padding: 12px 5px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-align: center; transition: 0.2s;
+            padding: 10px 5px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; text-align: center; transition: 0.2s;
         }
         .btn-font:hover { border-color: var(--text-muted); color: var(--text-main); }
         .btn-font.active {
@@ -139,7 +140,7 @@
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         input[type="text"]:focus, select:focus, textarea:focus { outline: none; border-color: var(--text-main); }
-        textarea { resize: vertical; min-height: 90px; }
+        textarea { resize: vertical; min-height: 80px; }
 
         /* 다크모드 드롭다운 아이콘 대체 처리 */
         select {
@@ -150,21 +151,21 @@
         body.dark-mode select { filter: none; background-color: var(--bg-input); color: var(--text-main); }
 
         .adjustment-row { display: flex; justify-content: space-between; align-items: center; }
-        .adjust-controls { display: flex; align-items: center; gap: 12px; }
+        .adjust-controls { display: flex; align-items: center; gap: 10px; }
         .btn-adjust {
             background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-muted);
-            width: 32px; height: 32px; border-radius: 6px; cursor: pointer;
+            width: 30px; height: 30px; border-radius: 6px; cursor: pointer;
             font-size: 1.1rem; transition: 0.1s; display: flex; justify-content: center; align-items: center; padding: 0;
         }
         .btn-adjust:hover { background: var(--active-bg); color: var(--active-text); border-color: var(--active-bg); }
         
-        .value-display { font-weight: 700; color: var(--accent); font-size: 1rem; min-width: 55px; text-align: center; }
-        .value-display .unit { font-size: 0.75rem; color: var(--text-muted); margin-left: 2px; }
+        .value-display { font-weight: 700; color: var(--accent); font-size: 0.95rem; min-width: 50px; text-align: center; }
+        .value-display .unit { font-size: 0.7rem; color: var(--text-muted); margin-left: 2px; }
 
-        .toggle-group { display: flex; gap: 8px; }
+        .toggle-group { display: flex; gap: 6px; }
         .btn-toggle {
             flex: 1; background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-muted);
-            padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-align: center; transition: 0.1s;
+            padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-align: center; transition: 0.1s;
         }
         .btn-toggle:hover { border-color: var(--text-main); color: var(--text-main); }
         .btn-toggle.active { color: var(--accent); border-color: var(--accent); font-weight: 700; background-color: rgba(59, 130, 246, 0.05); }
@@ -176,27 +177,24 @@
         }
         .btn-action-small:hover { background: var(--active-bg); color: var(--active-text); border-color: var(--active-bg); }
 
-        /* 저장/복사 버튼 그룹 */
-        .action-btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        /* 버튼 그룹 */
+        .action-btn-group { display: flex; gap: 8px; margin-top: 5px; }
         .btn-primary, .btn-secondary {
-            padding: 16px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
-            font-family: 'Orbitron', 'Noto Sans KR', 'Pretendard', sans-serif; letter-spacing: 0.5px; transition: all 0.2s ease;
+            padding: 14px 10px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+            font-family: 'Orbitron', 'Noto Sans KR', sans-serif; letter-spacing: 0.5px; transition: all 0.2s ease;
         }
-        .btn-primary {
-            flex: 2; background: var(--active-bg); color: var(--active-text); border: none;
-        }
+        .btn-primary { flex: 2; background: var(--active-bg); color: var(--active-text); border: none; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
         
-        .btn-secondary {
-            flex: 1; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-card);
-        }
+        .btn-secondary { flex: 1; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-card); }
         .btn-secondary:hover { border-color: var(--text-main); background: var(--bg-card); }
 
         /* ----------------------------------
            오른쪽: 미리보기 (반응형 1:1 캔버스)
         ----------------------------------- */
         .preview-area {
-            flex: 1 1 400px; 
+            flex: 1 1 350px; 
+            min-width: 0; /* 화면 밖으로 삐져나가는 현상 완벽 방지 */
             max-width: 700px;
             display: flex;
             justify-content: center;
@@ -205,10 +203,15 @@
         }
 
         #capture-area-wrapper {
-            width: 100%; aspect-ratio: 1 / 1; position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; background: #fff;
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
         }
-        body.dark-mode #capture-area-wrapper { box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+        body.dark-mode #capture-area-wrapper { box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
 
         #capture-area {
             width: 700px; height: 700px; background-color: #fff;
@@ -225,7 +228,10 @@
         .character-name { font-weight: 700; }
         .symbol-logo { position: absolute; bottom: 40px; right: 40px; width: 80px; opacity: 0.8; z-index: 2; }
         
-        @media (max-width: 900px) { .preview-area { position: relative; top: 0; } }
+        @media (max-width: 900px) { 
+            .preview-area { position: relative; top: 0; margin-top: 10px; }
+            body { padding: 20px 15px; }
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
@@ -268,7 +274,7 @@
             </select>
         </div>
 
-        <div class="control-card" style="display:flex; flex-direction: column; gap:15px;">
+        <div class="control-card" style="display:flex; flex-direction: column; gap:12px;">
             <div style="display: flex; gap: 10px;">
                 <div style="flex:1;">
                     <div class="card-label" style="margin-bottom:8px;">정렬</div>
@@ -319,14 +325,14 @@
                 <button class="btn-action-small" onclick="toggleQuotes()">" " ⇄ “ ” 변환</button>
             </div>
             <textarea id="mainInput" oninput="updateText()">“이곳은 초인적인 힘을 가진 소수, ‘센티넬’과 ‘가이드’가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.”</textarea>
-            <div style="display:flex; gap:10px; margin-top:12px;">
+            <div style="display:flex; gap:10px; margin-top:10px;">
                 <input type="text" id="creatorInput" placeholder="제작자명" oninput="updateText()" value="CherryMango" style="flex:1;">
                 <input type="text" id="characterInput" placeholder="캐릭터명 (자동 굵게)" oninput="updateText()" value="ARCH" style="flex:1.5;">
             </div>
         </div>
 
         <div class="action-btn-group">
-            <button class="btn-secondary" id="copyBtn" onclick="copyImage()">이미지 복사</button>
+            <button class="btn-secondary" id="copyBtn" onclick="copyImage()">복사</button>
             <button class="btn-primary" id="saveBtn" onclick="saveImage()">파일로 저장</button>
         </div>
     </div>
@@ -346,60 +352,70 @@
     </div>
 
     <script>
-        let state = {
+        // 전역 상태 설정
+        window.state = {
             fontFamily: "'Noto Sans KR', sans-serif",
             fontSize: 24, lineHeight: 1.5, letterSpacing: 0, 
             textAlign: 'center', wordBreak: 'keep-all', paddingTopBottom: 100, paddingLeftRight: 100
         };
 
         // 다크모드 토글
-        function toggleDarkMode() {
+        window.toggleDarkMode = function() {
             const body = document.body;
             const icon = document.getElementById('themeIcon');
             const text = document.getElementById('themeText');
-            
             body.classList.toggle('dark-mode');
-            
             if(body.classList.contains('dark-mode')) {
-                icon.textContent = "☀️";
-                text.textContent = "LIGHT MODE";
+                icon.textContent = "☀️"; text.textContent = "LIGHT MODE";
             } else {
-                icon.textContent = "🌙";
-                text.textContent = "DARK MODE";
+                icon.textContent = "🌙"; text.textContent = "DARK MODE";
             }
-        }
+        };
 
-        function resizeCanvas() {
+        // 완벽한 반응형 캔버스 스케일링 (버그 수정됨)
+        function applyScale() {
             const wrapper = document.getElementById('capture-area-wrapper');
             const area = document.getElementById('capture-area');
             if(wrapper && area) {
-                const scale = wrapper.clientWidth / 700;
+                const rect = wrapper.getBoundingClientRect();
+                const scale = rect.width / 700;
                 area.style.transform = `scale(${scale})`;
             }
         }
-        window.addEventListener('resize', resizeCanvas);
-        setTimeout(resizeCanvas, 100);
+        
+        // ResizeObserver를 통해 크기 변경 시 실시간으로 부드럽게 감지
+        window.addEventListener('DOMContentLoaded', () => {
+            const wrapper = document.getElementById('capture-area-wrapper');
+            if(wrapper) {
+                const ro = new ResizeObserver(() => applyScale());
+                ro.observe(wrapper);
+            }
+            applyScale();
+        });
 
-        function setFont(fontValue, btn) {
-            state.fontFamily = fontValue;
+        // 폰트 설정
+        window.setFont = function(fontValue, btn) {
+            window.state.fontFamily = fontValue;
             const group = document.getElementById('fontToggleGroup');
             group.querySelectorAll('.btn-font').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             updateStyle();
-        }
+        };
 
-        function adjust(key, val) {
-            state[key] = parseFloat((state[key] + val).toFixed(1));
-            if(key !== 'letterSpacing' && state[key] < 0) state[key] = 0; 
+        // 수치 조절
+        window.adjust = function(key, val) {
+            window.state[key] = parseFloat((window.state[key] + val).toFixed(1));
+            if(key !== 'letterSpacing' && window.state[key] < 0) window.state[key] = 0; 
             const displayEl = document.getElementById(`val-${key}`);
             if(displayEl){
                 let unit = key === 'lineHeight' ? 'x' : 'px';
-                displayEl.innerHTML = state[key] + `<span class="unit">${unit}</span>`;
+                displayEl.innerHTML = window.state[key] + `<span class="unit">${unit}</span>`;
             }
             updateStyle();
-        }
+        };
 
-        function toggleQuotes() {
+        // 따옴표 스마트 변환
+        window.toggleQuotes = function() {
             const textarea = document.getElementById('mainInput');
             let text = textarea.value;
             const hasStraight = /['"]/.test(text);
@@ -414,23 +430,23 @@
             }
             textarea.value = text;
             updateText();
-        }
+        };
 
-        function setAlign(value, btn) {
-            state.textAlign = value;
+        window.setAlign = function(value, btn) {
+            window.state.textAlign = value;
             const group = document.getElementById('alignToggleGroup');
             group.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             updateStyle();
-        }
+        };
 
-        function setWrap(value, btn) {
-            state.wordBreak = value;
+        window.setWrap = function(value, btn) {
+            window.state.wordBreak = value;
             const group = document.getElementById('wrapToggleGroup');
             group.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             updateStyle();
-        }
+        };
 
         function updateStyle() {
             const main = document.getElementById('display-main');
@@ -438,33 +454,32 @@
             const area = document.getElementById('capture-area');
             const textContainer = document.getElementById('text-container');
             
-            main.style.fontFamily = state.fontFamily;
-            sub.style.fontFamily = state.fontFamily;
-            
-            main.style.fontSize = state.fontSize + 'px';
-            main.style.lineHeight = state.lineHeight;
-            main.style.letterSpacing = state.letterSpacing + 'px';
-            main.style.textAlign = state.textAlign;
-            main.style.wordBreak = state.wordBreak;
+            main.style.fontFamily = window.state.fontFamily;
+            sub.style.fontFamily = window.state.fontFamily;
+            main.style.fontSize = window.state.fontSize + 'px';
+            main.style.lineHeight = window.state.lineHeight;
+            main.style.letterSpacing = window.state.letterSpacing + 'px';
+            main.style.textAlign = window.state.textAlign;
+            main.style.wordBreak = window.state.wordBreak;
 
-            sub.style.textAlign = state.textAlign;
-            sub.style.letterSpacing = state.letterSpacing + 'px';
+            sub.style.textAlign = window.state.textAlign;
+            sub.style.letterSpacing = window.state.letterSpacing + 'px';
             
-            area.style.padding = `${state.paddingTopBottom}px ${state.paddingLeftRight}px`;
+            area.style.padding = `${window.state.paddingTopBottom}px ${window.state.paddingLeftRight}px`;
             
-            if(state.textAlign === 'left') textContainer.style.alignItems = 'flex-start';
-            else if(state.textAlign === 'right') textContainer.style.alignItems = 'flex-end';
+            if(window.state.textAlign === 'left') textContainer.style.alignItems = 'flex-start';
+            else if(window.state.textAlign === 'right') textContainer.style.alignItems = 'flex-end';
             else textContainer.style.alignItems = 'center';
         }
 
-        function updateText() {
+        window.updateText = function() {
             document.getElementById('display-main').textContent = document.getElementById('mainInput').value;
             const creator = document.getElementById('creatorInput').value;
             const character = document.getElementById('characterInput').value;
             document.getElementById('display-sub').innerHTML = `<span class="creator-name">${creator}</span> | <span class="character-name">${character}</span>`;
-        }
+        };
 
-        function updateTheme() {
+        window.updateTheme = function() {
             const select = document.getElementById('themeSelect');
             const bg = select.value;
             const color = select.options[select.selectedIndex].dataset.color;
@@ -476,35 +491,80 @@
 
             if(bg === '「ARCH」 Quote Neutral B.png') logo.src = '「ARCH」 Symbol Logo White Ver.png';
             else logo.src = '「ARCH」 Symbol Logo Black Ver.png';
-        }
+        };
 
-        // 이미지 파일 다운로드
-        function saveImage() {
+        // 캡쳐 충돌 방지 최적화 (onclone 사용)
+        window.saveImage = function() {
             const btn = document.getElementById('saveBtn');
             const originalText = btn.textContent;
             btn.textContent = "생성 중..."; btn.disabled = true;
 
             const area = document.getElementById('capture-area');
-            const originalTransform = area.style.transform;
-            area.style.transform = 'scale(1)';
             
-            setTimeout(() => {
-                html2canvas(area, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
-                    const link = document.createElement('a');
-                    link.download = `ARCH_LOG_${Date.now()}.png`;
-                    link.href = canvas.toDataURL();
-                    link.click();
-                    area.style.transform = originalTransform;
-                    btn.textContent = originalText; btn.disabled = false;
-                });
-            }, 100);
-        }
+            html2canvas(area, { 
+                scale: 2, 
+                useCORS: true, 
+                backgroundColor: null,
+                onclone: function(clonedDoc) {
+                    // 복제된 돔에서 스케일을 원본(1)으로 초기화하여 화질/레이아웃 보존
+                    clonedDoc.getElementById('capture-area').style.transform = 'scale(1)';
+                }
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `ARCH_LOG_${Date.now()}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+                btn.textContent = originalText; btn.disabled = false;
+            }).catch(err => {
+                alert("저장 실패");
+                btn.textContent = originalText; btn.disabled = false;
+            });
+        };
 
-        // 이미지 클립보드 복사
-        function copyImage() {
+        // 이미지 복사 충돌 방지 최적화
+        window.copyImage = function() {
             const btn = document.getElementById('copyBtn');
             const originalText = btn.textContent;
             btn.textContent = "복사 중..."; btn.disabled = true;
 
             const area = document.getElementById('capture-area');
-            const originalTransform
+            
+            html2canvas(area, { 
+                scale: 2, 
+                useCORS: true, 
+                backgroundColor: null,
+                onclone: function(clonedDoc) {
+                    clonedDoc.getElementById('capture-area').style.transform = 'scale(1)';
+                }
+            }).then(canvas => {
+                canvas.toBlob(blob => {
+                    if(!blob) {
+                        alert("복사 오류가 발생했습니다.");
+                        btn.textContent = originalText; btn.disabled = false;
+                        return;
+                    }
+                    try {
+                        const item = new ClipboardItem({ 'image/png': blob });
+                        navigator.clipboard.write([item]).then(() => {
+                            btn.textContent = "복사 완료!";
+                            setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 2000);
+                        }).catch(err => {
+                            alert("이 환경에서는 복사를 지원하지 않습니다. 파일 저장을 이용해주세요.");
+                            btn.textContent = originalText; btn.disabled = false;
+                        });
+                    } catch(e) {
+                        alert("클립보드 API 미지원 환경입니다.");
+                        btn.textContent = originalText; btn.disabled = false;
+                    }
+                }, 'image/png');
+            }).catch(err => {
+                alert("복사 실패");
+                btn.textContent = originalText; btn.disabled = false;
+            });
+        };
+
+        // 초기 실행
+        updateStyle(); updateTheme(); updateText();
+    </script>
+</body>
+</html>
