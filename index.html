@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARCH_QUOTATION_SYSTEM_v2.0</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Noto+Sans+KR:wght@300;700&family=Nanum+Myeongjo:wght@400;700&family=Black+Han+Sans&family=Song+Myung&display=swap">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-dark: #0f1114;
+            --panel-bg: #1a1d23;
+            --card-bg: #252932;
+            --accent-blue: #3b82f6;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 50px;
+            min-height: 100vh;
+            gap: 40px;
+        }
+
+        /* ----------------------------------
+           왼쪽: 컨트롤 패널 (어제 만드신 디자인 참고)
+        ----------------------------------- */
+        .control-panel {
+            width: 420px;
+            background: var(--panel-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 1px solid var(--border-color);
+        }
+
+        .header-area {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .header-area h1 {
+            font-family: 'Orbitron';
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+            margin: 0;
+            color: var(--accent-blue);
+        }
+
+        /* 공통 컨트롤 카드 스타일 */
+        .control-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .label-row label {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .control-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-adjust {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            width: 32px; height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+
+        .btn-adjust:hover { background: var(--accent-blue); border-color: var(--accent-blue); }
+
+        .value-display {
+            flex: 1;
+            text-align: center;
+            font-family: 'Orbitron';
+            font-weight: bold;
+            color: var(--accent-blue);
+            font-size: 1.1rem;
+        }
+
+        .unit { font-size: 0.7rem; color: var(--text-muted); margin-left: 4px; }
+
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: #121418;
+            color: #fff;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+
+        /* ----------------------------------
+           오른쪽: 미리보기 (1:1 캔버스)
+        ----------------------------------- */
+        .preview-area {
+            position: sticky;
+            top: 50px;
+        }
+
+        #capture-area {
+            width: 700px;
+            height: 700px;
+            background-color: #fff;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            overflow: hidden;
+            background-image: url('bg-neutral-white.png'); /* 기본 배경 */
+        }
+
+        .quote-main {
+            font-size: 32px;
+            line-height: 1.5;
+            text-align: center;
+            word-break: keep-all;
+            white-space: pre-wrap;
+            z-index: 2;
+            transition: all 0.1s ease;
+        }
+
+        .quote-sub {
+            margin-top: 30px;
+            font-size: 18px;
+            z-index: 2;
+        }
+
+        .symbol-logo {
+            position: absolute;
+            bottom: 40px; right: 40px;
+            width: 80px; opacity: 0.8;
+            z-index: 2;
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--accent-blue);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 10px;
+            font-family: 'Orbitron';
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="control-panel">
+        <div class="header-area">
+            <h1>MISSION_CONTROL</h1>
+        </div>
+
+        <div class="control-card">
+            <div class="label-row"><label>FONT_FACE</label></div>
+            <select id="fontSelect" onchange="updateStyle()">
+                <option value="'Noto Sans KR'">본고딕 (Sans-Serif)</option>
+                <option value="'Nanum Myeongjo'">나눔명조 (Serif)</option>
+                <option value="'Song Myung'">송명 (Classic)</option>
+                <option value="'Black Han Sans'">블랙한산스 (Bold)</option>
+                <option value="'Orbitron'">오비트론 (Sci-Fi)</option>
+            </select>
+        </div>
+
+        <div class="control-card">
+            <div class="label-row"><label>ATTRIBUTE_SYNC</label></div>
+            <select id="themeSelect" onchange="updateTheme()">
+                <option value="bg-neutral-white.png" data-color="#1a1a1a">🤍 무속성 (Neutral) White</option>
+                <option value="bg-neutral-black.png" data-color="#ffffff">🖤 무속성 (Neutral) Black</option>
+                <option value="bg-pyre.png" data-color="#1a1a1a">🔥 불 (Pyre)</option>
+                <option value="bg-aqua.png" data-color="#1a1a1a">💧 물 (Aqua)</option>
+                <option value="bg-verde.png" data-color="#1a1a1a">🌿 풀 (Verde)</option>
+                <option value="bg-fulmen.png" data-color="#1a1a1a">⚡ 번개 (Fulmen)</option>
+                <option value="bg-aero.png" data-color="#1a1a1a">💨 바람 (Aero)</option>
+                <option value="bg-glacies.png" data-color="#1a1a1a">❄️ 얼음 (Glacies)</option>
+            </select>
+        </div>
+
+        <div class="control-card">
+            <div class="label-row"><label>FONT_SIZE</label></div>
+            <div class="control-input-wrapper">
+                <button class="btn-adjust" onclick="adjust('fontSize', -1)">−</button>
+                <div class="value-display" id="val-fontSize">32<span class="unit">px</span></div>
+                <button class="btn-adjust" onclick="adjust('fontSize', 1)">+</button>
+            </div>
+        </div>
+
+        <div class="control-card">
+            <div class="label-row"><label>LINE_HEIGHT</label></div>
+            <div class="control-input-wrapper">
+                <button class="btn-adjust" onclick="adjust('lineHeight', -0.1)">−</button>
+                <div class="value-display" id="val-lineHeight">1.5<span class="unit">x</span></div>
+                <button class="btn-adjust" onclick="adjust('lineHeight', 0.1)">+</button>
+            </div>
+        </div>
+
+        <div class="control-card">
+            <div class="label-row"><label>PADDING</label></div>
+            <div class="control-input-wrapper">
+                <button class="btn-adjust" onclick="adjust('padding', -10)">−</button>
+                <div class="value-display" id="val-padding">100<span class="unit">px</span></div>
+                <button class="btn-adjust" onclick="adjust('padding', 10)">+</button>
+            </div>
+        </div>
+
+        <div class="control-card">
+            <textarea id="mainInput" placeholder="발췌할 내용을 입력하세요..." oninput="updateText()">이곳은 초인적인 힘을 가진 소수, '센티넬'과 '가이드'가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.</textarea>
+            <input type="text" id="subInput" placeholder="제작자 | 캐릭터" oninput="updateText()" style="margin-top:10px;" value="CherryMango | ARCH">
+        </div>
+
+        <button class="download-btn" onclick="saveImage()">EXTRACT_DATA</button>
+    </div>
+
+    <div class="preview-area">
+        <div id="capture-area">
+            <div class="quote-main" id="display-main">이곳은 초인적인 힘을 가진 소수, '센티넬'과 '가이드'가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.</div>
+            <div class="quote-sub" id="display-sub">CherryMango | ARCH</div>
+            <img src="logo-black.png" id="logoDisplay" class="symbol-logo">
+        </div>
+    </div>
+
+    <script>
+        // 상태 관리
+        let state = {
+            fontSize: 32,
+            lineHeight: 1.5,
+            padding: 100
+        };
+
+        function adjust(key, val) {
+            state[key] = parseFloat((state[key] + val).toFixed(1));
+            if(state[key] < 0) state[key] = 0;
+            document.getElementById(`val-${key}`).innerHTML = state[key] + `<span class="unit">${key==='lineHeight'?'x':'px'}</span>`;
+            updateStyle();
+        }
+
+        function updateStyle() {
+            const main = document.getElementById('display-main');
+            const sub = document.getElementById('display-sub');
+            const font = document.getElementById('fontSelect').value;
+            
+            main.style.fontSize = state.fontSize + 'px';
+            main.style.lineHeight = state.lineHeight;
+            document.getElementById('capture-area').style.padding = state.padding + 'px';
+            
+            // 폰트 적용
+            main.style.fontFamily = font;
+            sub.style.fontFamily = font;
+        }
+
+        function updateText() {
+            document.getElementById('display-main').textContent = document.getElementById('mainInput').value;
+            document.getElementById('display-sub').textContent = document.getElementById('subInput').value;
+        }
+
+        function updateTheme() {
+            const select = document.getElementById('themeSelect');
+            const bg = select.value;
+            const color = select.options[select.selectedIndex].dataset.color;
+            const logo = document.getElementById('logoDisplay');
+            
+            document.getElementById('capture-area').style.backgroundImage = `url('${bg}')`;
+            document.getElementById('display-main').style.color = color;
+            document.getElementById('display-sub').style.color = color;
+
+            // 블랙 테마일 때 로고 자동 반전
+            if(bg === 'bg-neutral-black.png') {
+                logo.src = 'logo-white.png';
+            } else {
+                logo.src = 'logo-black.png';
+            }
+        }
+
+        function saveImage() {
+            const btn = document.querySelector('.download-btn');
+            btn.textContent = "PROCESSING...";
+            
+            html2canvas(document.getElementById('capture-area'), {
+                scale: 2,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `ARCH_EXTRACT_${Date.now()}.png`;
+                link.href = canvas.toDataURL();
+                link.click();
+                btn.textContent = "EXTRACT_DATA";
+            });
+        }
+
+        // 초기화
+        updateStyle();
+        updateTheme();
+    </script>
+</body>
+</html>
