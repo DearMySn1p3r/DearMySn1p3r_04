@@ -3,24 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCH_QUOTATION_SYSTEM_v2.0</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Noto+Sans+KR:wght@300;700&family=Nanum+Myeongjo:wght@400;700&family=Black+Han+Sans&family=Song+Myung&display=swap">
+    <title>ARCH_LOG_SYSTEM_v3.0</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Noto+Sans+KR:wght@300;700&family=Nanum+Myeongjo:wght@400;700&family=Black+Han+Sans&family=Song+Myung&family=Nanum+Gothic:wght@400;700&display=swap">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
         :root {
-            --bg-dark: #0f1114;
-            --panel-bg: #1a1d23;
-            --card-bg: #252932;
-            --accent-blue: #3b82f6;
-            --text-main: #e2e8f0;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.08);
+            /* 화이트 테마 및 SF 틱한 Mint Accent */
+            --bg-body: #f4f7f6;
+            --bg-card: #ffffff;
+            --text-main: #2d3436;
+            --text-muted: #636e72;
+            --border-card: rgba(0,0,0,0.06);
+            --accent-sf: #00b894; /* 사이버네틱 민트 그린 */
+            --bg-input: #f9fbfd;
         }
 
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: var(--bg-dark);
+            background-color: var(--bg-body);
             color: var(--text-main);
             margin: 0;
             display: flex;
@@ -29,94 +30,165 @@
             padding: 50px;
             min-height: 100vh;
             gap: 40px;
+            box-sizing: border-box;
         }
 
         /* ----------------------------------
-           왼쪽: 컨트롤 패널 (어제 만드신 디자인 참고)
+           왼쪽: 컨트롤 패널 (화이트 SF 틱)
         ----------------------------------- */
         .control-panel {
-            width: 420px;
-            background: var(--panel-bg);
+            width: 440px;
+            background: var(--bg-card);
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-card);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
-        .header-area {
-            margin-bottom: 25px;
+        .panel-header {
             text-align: center;
+            margin-bottom: 10px;
+            position: relative;
         }
 
-        .header-area h1 {
+        .panel-header h1 {
             font-family: 'Orbitron';
-            font-size: 1.2rem;
-            letter-spacing: 4px;
+            font-size: 1rem;
+            letter-spacing: 5px;
             margin: 0;
-            color: var(--accent-blue);
+            color: var(--accent-sf);
+            display: inline-block;
+        }
+        
+        /* 헤더 아래 SF틱한 장식 선 */
+        .panel-header::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-sf), transparent);
         }
 
-        /* 공통 컨트롤 카드 스타일 */
+        /* 컨트롤 카드 스타일 */
         .control-card {
-            background: var(--card-bg);
+            background: var(--bg-input);
             border-radius: 12px;
             padding: 15px 20px;
-            margin-bottom: 15px;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border-card);
+            transition: all 0.2s ease;
+        }
+        .control-card:hover {
+            border-color: var(--accent-sf);
+            box-shadow: 0 4px 10px rgba(0,184,148,0.1);
         }
 
-        .label-row {
+        .card-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-family: 'Orbitron';
+            letter-spacing: 1px;
+            display: block;
+        }
+
+        /* 입력 및 선택 요소 스타일 */
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-card);
+            background: #fff;
+            color: var(--text-main);
+            font-family: inherit;
+            box-sizing: border-box;
+            font-size: 0.9rem;
+            transition: 0.2s ease;
+        }
+        input[type="text"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-sf);
+            box-shadow: 0 0 0 3px rgba(0,184,148,0.1);
+        }
+
+        /* 폰트 및 테마 선택 드롭다운 어제 디자인 적용 */
+        select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232d3436%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px top 50%;
+            background-size: 10px auto;
+        }
+
+        /* 슬라이더 및 수치 조절 UI */
+        .adjustment-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 10px;
         }
-
-        .label-row label {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        .control-input-wrapper {
+        .adjust-controls {
             display: flex;
             align-items: center;
             gap: 15px;
         }
-
         .btn-adjust {
-            background: transparent;
-            border: 1px solid var(--border-color);
+            background: #fff;
+            border: 1px solid var(--border-card);
             color: var(--text-main);
             width: 32px; height: 32px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 1.2rem;
             transition: 0.2s;
+            display: flex; justify-content: center; align-items: center;
         }
-
-        .btn-adjust:hover { background: var(--accent-blue); border-color: var(--accent-blue); }
+        .btn-adjust:hover { background: var(--accent-sf); color: #fff; border-color: var(--accent-sf); }
 
         .value-display {
-            flex: 1;
-            text-align: center;
             font-family: 'Orbitron';
-            font-weight: bold;
-            color: var(--accent-blue);
-            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--accent-sf);
+            font-size: 1rem;
+            min-width: 60px;
+            text-align: center;
         }
+        .value-display .unit { font-size: 0.7rem; color: var(--text-muted); margin-left: 2px; }
 
-        .unit { font-size: 0.7rem; color: var(--text-muted); margin-left: 4px; }
+        /* 컬러 피커 커스텀 */
+        .color-picker-wrapper {
+            display: flex; align-items: center; gap: 10px;
+            background: #fff; border: 1px solid var(--border-card);
+            padding: 8px 12px; border-radius: 8px; box-sizing: border-box; width: 100%;
+        }
+        input[type="color"] {
+            -webkit-appearance: none; border: none; width: 28px; height: 28px;
+            border-radius: 4px; cursor: pointer; padding: 0; background: none;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: 1px solid rgba(0,0,0,0.1); border-radius: 4px; }
+        .color-hex { font-size: 0.9rem; color: var(--text-main); font-family: monospace; }
 
-        input[type="text"], select, textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-            background: #121418;
-            color: #fff;
-            font-family: inherit;
-            box-sizing: border-box;
+        /* 추출 버튼 (깔끔한 화이트 SF 틱) */
+        .download-btn {
+            width: 100%; padding: 18px;
+            background: #fff; color: var(--text-main);
+            border: 2px solid var(--accent-sf); border-radius: 12px;
+            font-weight: 900; font-size: 1rem; cursor: pointer;
+            font-family: 'Orbitron'; letter-spacing: 2px;
+            transition: all 0.2s ease;
+            box-shadow: 0 5px 15px rgba(0,184,148,0.1);
+        }
+        .download-btn:hover {
+            background: var(--accent-sf); color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,184,148,0.3);
         }
 
         /* ----------------------------------
@@ -128,122 +200,154 @@
         }
 
         #capture-area {
-            width: 700px;
-            height: 700px;
+            width: 700px; height: 700px;
             background-color: #fff;
-            background-size: cover;
-            background-position: center;
+            background-size: cover; background-position: center;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.1);
             overflow: hidden;
-            background-image: url('bg-neutral-white.png'); /* 기본 배경 */
+            box-sizing: border-box;
+            background-image: url('「ARCH」 Quote Neutral A.png'); /* 기본 배경 */
+            
+            /* 초기 이미지 조절값 적용 */
+            padding: 100px 100px;
+            border-style: solid; border-width: 0px; border-color: transparent;
+        }
+
+        /* 문구 입력창에서 동적으로 생성되는 텍스트 컨테이너 */
+        #text-container {
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 2;
         }
 
         .quote-main {
-            font-size: 32px;
-            line-height: 1.5;
-            text-align: center;
-            word-break: keep-all;
-            white-space: pre-wrap;
-            z-index: 2;
+            text-align: center; word-break: keep-all; white-space: pre-wrap;
             transition: all 0.1s ease;
+            color: #1a1a1a;
+            /* 초기 폰트 스타일 */
+            font-size: 32px; line-height: 1.5; font-family: 'Noto Sans KR';
         }
 
         .quote-sub {
-            margin-top: 30px;
-            font-size: 18px;
-            z-index: 2;
+            margin-top: 30px; font-size: 18px; z-index: 2; text-align: center;
+            font-family: 'Noto Sans KR';
+            opacity: 0.9;
         }
+        .creator-name { font-weight: 300; }
+        .character-name { font-weight: 700; }
 
         .symbol-logo {
-            position: absolute;
-            bottom: 40px; right: 40px;
-            width: 80px; opacity: 0.8;
-            z-index: 2;
+            position: absolute; bottom: 40px; right: 40px;
+            width: 80px; opacity: 0.8; z-index: 2;
         }
 
-        .download-btn {
-            width: 100%;
-            padding: 18px;
-            background: var(--accent-blue);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 10px;
-            font-family: 'Orbitron';
-            letter-spacing: 2px;
-        }
     </style>
 </head>
 <body>
 
     <div class="control-panel">
-        <div class="header-area">
-            <h1>MISSION_CONTROL</h1>
+        <div class="panel-header">
+            <h1>ARCH_TERMINAL</h1>
         </div>
 
         <div class="control-card">
-            <div class="label-row"><label>FONT_FACE</label></div>
+            <span class="card-label">FONT_FACE</span>
             <select id="fontSelect" onchange="updateStyle()">
                 <option value="'Noto Sans KR'">본고딕 (Sans-Serif)</option>
+                <option value="'Nanum Gothic'">나눔고딕 (Rounded)</option>
                 <option value="'Nanum Myeongjo'">나눔명조 (Serif)</option>
-                <option value="'Song Myung'">송명 (Classic)</option>
+                <option value="'Song Myung'">송명 (Classic Serif)</option>
                 <option value="'Black Han Sans'">블랙한산스 (Bold)</option>
                 <option value="'Orbitron'">오비트론 (Sci-Fi)</option>
             </select>
         </div>
 
         <div class="control-card">
-            <div class="label-row"><label>ATTRIBUTE_SYNC</label></div>
+            <span class="card-label">ATTRIBUTE_SYNC</span>
             <select id="themeSelect" onchange="updateTheme()">
-                <option value="bg-neutral-white.png" data-color="#1a1a1a">🤍 무속성 (Neutral) White</option>
-                <option value="bg-neutral-black.png" data-color="#ffffff">🖤 무속성 (Neutral) Black</option>
-                <option value="bg-pyre.png" data-color="#1a1a1a">🔥 불 (Pyre)</option>
-                <option value="bg-aqua.png" data-color="#1a1a1a">💧 물 (Aqua)</option>
-                <option value="bg-verde.png" data-color="#1a1a1a">🌿 풀 (Verde)</option>
-                <option value="bg-fulmen.png" data-color="#1a1a1a">⚡ 번개 (Fulmen)</option>
-                <option value="bg-aero.png" data-color="#1a1a1a">💨 바람 (Aero)</option>
-                <option value="bg-glacies.png" data-color="#1a1a1a">❄️ 얼음 (Glacies)</option>
+                <option value="「ARCH」 Quote Neutral A.png" data-color="#1a1a1a" selected>🤍 Neutral A (White)</option>
+                <option value="「ARCH」 Quote Neutral B.png" data-color="#ffffff">🖤 Neutral B (Black)</option>
+                <option value="「ARCH」 Quote Pyre.png" data-color="#1a1a1a">🔥 불 (Pyre)</option>
+                <option value="「ARCH」 Quote Aqua.png" data-color="#1a1a1a">💧 물 (Aqua)</option>
+                <option value="「ARCH» Quote Verde.png" data-color="#1a1a1a">🌿 풀 (Verde)</option>
+                <option value="「ARCH» Quote Fulmen.png" data-color="#1a1a1a">⚡ 번개 (Fulmen)</option>
+                <option value="「ARCH» Quote Aero.png" data-color="#1a1a1a">💨 바람 (Aero)</option>
+                <option value="「ARCH» Quote Glacies.png" data-color="#1a1a1a">❄️ 얼음 (Glacies)</option>
             </select>
         </div>
 
         <div class="control-card">
-            <div class="label-row"><label>FONT_SIZE</label></div>
-            <div class="control-input-wrapper">
-                <button class="btn-adjust" onclick="adjust('fontSize', -1)">−</button>
+            <span class="card-label">FONT_SIZE</span>
+            <div class="adjustment-row">
                 <div class="value-display" id="val-fontSize">32<span class="unit">px</span></div>
-                <button class="btn-adjust" onclick="adjust('fontSize', 1)">+</button>
+                <div class="adjust-controls">
+                    <button class="btn-adjust" onclick="adjust('fontSize', -2)">−</button>
+                    <button class="btn-adjust" onclick="adjust('fontSize', 2)">+</button>
+                </div>
             </div>
         </div>
 
         <div class="control-card">
-            <div class="label-row"><label>LINE_HEIGHT</label></div>
-            <div class="control-input-wrapper">
-                <button class="btn-adjust" onclick="adjust('lineHeight', -0.1)">−</button>
+            <span class="card-label">LINE_HEIGHT</span>
+            <div class="adjustment-row">
                 <div class="value-display" id="val-lineHeight">1.5<span class="unit">x</span></div>
-                <button class="btn-adjust" onclick="adjust('lineHeight', 0.1)">+</button>
+                <div class="adjust-controls">
+                    <button class="btn-adjust" onclick="adjust('lineHeight', -0.1)">−</button>
+                    <button class="btn-adjust" onclick="adjust('lineHeight', 0.1)">+</button>
+                </div>
             </div>
         </div>
 
         <div class="control-card">
-            <div class="label-row"><label>PADDING</label></div>
-            <div class="control-input-wrapper">
-                <button class="btn-adjust" onclick="adjust('padding', -10)">−</button>
-                <div class="value-display" id="val-padding">100<span class="unit">px</span></div>
-                <button class="btn-adjust" onclick="adjust('padding', 10)">+</button>
+            <span class="card-label">MARGIN_TOP_BOTTOM</span>
+            <div class="adjustment-row">
+                <div class="value-display" id="val-paddingTopBottom">100<span class="unit">px</span></div>
+                <div class="adjust-controls">
+                    <button class="btn-adjust" onclick="adjust('paddingTopBottom', -10)">−</button>
+                    <button class="btn-adjust" onclick="adjust('paddingTopBottom', 10)">+</button>
+                </div>
             </div>
         </div>
 
         <div class="control-card">
+            <span class="card-label">MARGIN_LEFT_RIGHT</span>
+            <div class="adjustment-row">
+                <div class="value-display" id="val-paddingLeftRight">100<span class="unit">px</span></div>
+                <div class="adjust-controls">
+                    <button class="btn-adjust" onclick="adjust('paddingLeftRight', -10)">−</button>
+                    <button class="btn-adjust" onclick="adjust('paddingLeftRight', 10)">+</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="control-card">
+            <span class="card-label">BORDER_WIDTH</span>
+            <div class="adjustment-row">
+                <div class="value-display" id="val-borderWidth">0<span class="unit">px</span></div>
+                <div class="adjust-controls">
+                    <button class="btn-adjust" onclick="adjust('borderWidth', -1)">−</button>
+                    <button class="btn-adjust" onclick="adjust('borderWidth', 1)">+</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="control-card">
+            <span class="card-label">BORDER_COLOR</span>
+            <div class="color-picker-wrapper">
+                <input type="color" id="borderColorPicker" value="transparent" oninput="adjust('borderColor', 0)">
+                <span class="color-hex" id="borderColorHex">Transparent</span>
+            </div>
+        </div>
+
+        <div class="control-card">
+            <span class="card-label">TEXT_CONTENT</span>
             <textarea id="mainInput" placeholder="발췌할 내용을 입력하세요..." oninput="updateText()">이곳은 초인적인 힘을 가진 소수, '센티넬'과 '가이드'가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.</textarea>
-            <input type="text" id="subInput" placeholder="제작자 | 캐릭터" oninput="updateText()" style="margin-top:10px;" value="CherryMango | ARCH">
+            <div style="display:flex; gap:10px; margin-top:10px;">
+                <input type="text" id="creatorInput" placeholder="제작자명" oninput="updateText()" value="CherryMango" style="width:40%;">
+                <input type="text" id="characterInput" placeholder="캐릭터명 (굵게)" oninput="updateText()" value="ARCH" style="width:60%;">
+            </div>
         </div>
 
         <button class="download-btn" onclick="saveImage()">EXTRACT_DATA</button>
@@ -251,44 +355,70 @@
 
     <div class="preview-area">
         <div id="capture-area">
-            <div class="quote-main" id="display-main">이곳은 초인적인 힘을 가진 소수, '센티넬'과 '가이드'가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.</div>
-            <div class="quote-sub" id="display-sub">CherryMango | ARCH</div>
-            <img src="logo-black.png" id="logoDisplay" class="symbol-logo">
+            <div id="text-container">
+                <div class="quote-main" id="display-main">이곳은 초인적인 힘을 가진 소수, '센티넬'과 '가이드'가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.</div>
+                <div class="quote-sub" id="display-sub">
+                    <span class="creator-name">CherryMango</span> | <span class="character-name">ARCH</span>
+                </div>
+            </div>
+            <img src="「ARCH」 Symbol Logo Black Ver.png" id="logoDisplay" class="symbol-logo">
         </div>
     </div>
 
     <script>
-        // 상태 관리
+        // 상태 관리 (이미지 조절 포함)
         let state = {
             fontSize: 32,
             lineHeight: 1.5,
-            padding: 100
+            paddingTopBottom: 100,
+            paddingLeftRight: 100,
+            borderWidth: 0,
+            borderColor: 'transparent'
         };
 
         function adjust(key, val) {
-            state[key] = parseFloat((state[key] + val).toFixed(1));
-            if(state[key] < 0) state[key] = 0;
-            document.getElementById(`val-${key}`).innerHTML = state[key] + `<span class="unit">${key==='lineHeight'?'x':'px'}</span>`;
+            if(key === 'borderColor'){
+                state[key] = document.getElementById('borderColorPicker').value;
+                document.getElementById('borderColorHex').textContent = state[key].toUpperCase();
+            } else {
+                state[key] = parseFloat((state[key] + val).toFixed(1));
+                if(state[key] < 0) state[key] = 0; // 최소값 제한
+                document.getElementById(`val-${key}`).innerHTML = state[key] + `<span class="unit">${key==='lineHeight'?'x':'px'}</span>`;
+            }
             updateStyle();
         }
 
         function updateStyle() {
             const main = document.getElementById('display-main');
             const sub = document.getElementById('display-sub');
+            const area = document.getElementById('capture-area');
             const font = document.getElementById('fontSelect').value;
             
+            // 이미지 조절 기능 적용
             main.style.fontSize = state.fontSize + 'px';
             main.style.lineHeight = state.lineHeight;
-            document.getElementById('capture-area').style.padding = state.padding + 'px';
+            area.style.padding = `${state.paddingTopBottom}px ${state.paddingLeftRight}px`;
+            area.style.borderWidth = state.borderWidth + 'px';
+            area.style.borderColor = state.borderColor;
             
             // 폰트 적용
             main.style.fontFamily = font;
             sub.style.fontFamily = font;
+            
+            // 'Black Han Sans'일 경우 두꺼운 폰트이므로 행간 자동 조절 (옵션)
+            if(font === "'Black Han Sans'"){
+                main.style.lineHeight = Math.min(state.lineHeight, 1.3);
+            }
         }
 
         function updateText() {
+            // 본문
             document.getElementById('display-main').textContent = document.getElementById('mainInput').value;
-            document.getElementById('display-sub').textContent = document.getElementById('subInput').value;
+            // 제작자/캐릭터 분리 렌더링
+            const creator = document.getElementById('creatorInput').value;
+            const character = document.getElementById('characterInput').value;
+            const subDisplay = document.getElementById('display-sub');
+            subDisplay.innerHTML = `<span class="creator-name">${creator}</span> | <span class="character-name">${character}</span>`;
         }
 
         function updateTheme() {
@@ -301,33 +431,46 @@
             document.getElementById('display-main').style.color = color;
             document.getElementById('display-sub').style.color = color;
 
-            // 블랙 테마일 때 로고 자동 반전
-            if(bg === 'bg-neutral-black.png') {
-                logo.src = 'logo-white.png';
+            // 블랙 무속성 테마일 때 로고 자동 반전
+            if(bg === '「ARCH」 Quote Neutral B.png') {
+                logo.src = '「ARCH」 Symbol Logo White Ver.png';
             } else {
-                logo.src = 'logo-black.png';
+                logo.src = '「ARCH」 Symbol Logo Black Ver.png';
             }
         }
 
         function saveImage() {
             const btn = document.querySelector('.download-btn');
+            const originalText = btn.textContent;
             btn.textContent = "PROCESSING...";
+            btn.disabled = true;
             
+            // html2canvas로 고화질 추출
             html2canvas(document.getElementById('capture-area'), {
-                scale: 2,
-                useCORS: true
+                scale: 2, // 1400x1400 픽셀 (고화질)
+                useCORS: true, // 크로스 도메인 이미지 허용
+                backgroundColor: null // 투명 배경 유지
             }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `ARCH_EXTRACT_${Date.now()}.png`;
                 link.href = canvas.toDataURL();
                 link.click();
-                btn.textContent = "EXTRACT_DATA";
+                
+                // 버튼 복구
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }).catch(err => {
+                console.error("추출 오류:", err);
+                alert("이미지 추출에 실패했습니다.");
+                btn.textContent = originalText;
+                btn.disabled = false;
             });
         }
 
-        // 초기화
+        // 초기화 세팅
         updateStyle();
         updateTheme();
+        updateText();
     </script>
 </body>
 </html>
