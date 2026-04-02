@@ -3,231 +3,263 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCH_LOG_SYSTEM_v5.0</title>
+    <title>ARCH_LOG_SYSTEM_v7.0</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Noto+Sans+KR:wght@300;700&display=swap">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Noto+Sans+KR:wght@300;700&family=Noto+Serif+KR:wght@300;700&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Gothic:wght@400;700&display=swap">
     <style>
         @import url('https://cdn.jsdelivr.net/font-kopub/1.0/kopubbatang.css');
 
         :root {
-            --bg-body: #f0f0f0;
+            /* 라이트 모드 (기본) */
+            --bg-body: #f4f5f7;
             --bg-card: #ffffff;
-            --text-main: #000000;
-            --text-muted: #666666;
-            --border-card: rgba(0,0,0,0.1);
-            --bg-input: #f8f8f8;
-            --active-bg: #000000;
+            --text-main: #1a1a1a;
+            --text-muted: #868e96;
+            --border-card: #dee2e6;
+            --bg-input: #f8f9fa;
+            --active-bg: #212529;
             --active-text: #ffffff;
+            --accent: #3b82f6; 
+        }
+
+        /* 다크 모드 (블랙 테마) 설정 */
+        body.dark-mode {
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #f8f9fa;
+            --text-muted: #adb5bd;
+            --border-card: #333333;
+            --bg-input: #2b2b2b;
+            --active-bg: #f8f9fa;
+            --active-text: #121212;
+            --accent: #60a5fa;
         }
 
         body {
-            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+            font-family: 'Pretendard', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
             margin: 0;
             display: flex;
-            flex-wrap: wrap; /* 창 크기에 따라 아래로 떨어지도록 설정 */
+            flex-wrap: wrap; 
             justify-content: center;
             align-items: flex-start;
-            padding: 40px 20px;
+            padding: 50px 20px;
             min-height: 100vh;
             gap: 40px;
             box-sizing: border-box;
+            transition: background-color 0.3s, color 0.3s;
         }
 
+        /* 다크모드 토글 버튼 */
+        .theme-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-card);
+            color: var(--text-main);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .theme-toggle-btn:hover { border-color: var(--text-main); }
+
         /* ----------------------------------
-           왼쪽: 컨트롤 패널 (B&W)
+           왼쪽: 컨트롤 패널
         ----------------------------------- */
         .control-panel {
-            width: 100%;
-            max-width: 440px;
+            flex: 1 1 400px;
+            max-width: 480px;
             background: var(--bg-card);
             border-radius: 16px;
             padding: 30px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             border: 1px solid var(--border-card);
             display: flex;
             flex-direction: column;
             gap: 18px;
             box-sizing: border-box;
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
-        .panel-header {
-            text-align: center;
-            margin-bottom: 5px;
-            position: relative;
-        }
-
-        .panel-header h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.9rem;
-            letter-spacing: 5px;
-            margin: 0;
-            color: var(--text-main);
-            display: inline-block;
-        }
-        
-        .panel-header::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 1px;
-            background: var(--border-card);
-        }
+        .panel-header { text-align: center; margin-bottom: 5px; }
+        .panel-header h1 { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; letter-spacing: 4px; margin: 0; color: var(--text-main); }
+        .panel-header hr { width: 40px; border: none; border-top: 2px solid var(--text-main); margin: 10px auto 0; }
 
         .control-card {
-            background: var(--bg-input);
+            background: var(--bg-card); 
             border-radius: 10px;
-            padding: 12px 18px;
+            padding: 15px;
             border: 1px solid var(--border-card);
+            transition: background-color 0.3s, border-color 0.3s;
         }
 
         .card-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             font-weight: 700;
-            margin-bottom: 8px;
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        input[type="text"], select, textarea {
-            width: 100%; padding: 10px;
-            border-radius: 6px; border: 1px solid var(--border-card);
-            background: #fff; color: var(--text-main);
-            font-family: inherit; box-sizing: border-box; font-size: 0.9rem;
+        /* 폰트 선택 그리드 */
+        .font-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .btn-font {
+            background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-muted);
+            padding: 12px 5px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-align: center; transition: 0.2s;
         }
-        input[type="text"]:focus, select:focus, textarea:focus {
-            outline: none; border-color: #000;
+        .btn-font:hover { border-color: var(--text-muted); color: var(--text-main); }
+        .btn-font.active {
+            border-color: var(--accent); color: var(--accent); background-color: rgba(59, 130, 246, 0.05); font-weight: 600;
         }
-        textarea { resize: vertical; min-height: 80px; }
 
+        .f-notoserif { font-family: 'Noto Serif KR', serif; }
+        .f-kopub { font-family: 'KoPub Batang', 'KoPubBatang', serif; }
+        .f-myeongjo { font-family: 'Nanum Myeongjo', serif; }
+        .f-pretendard { font-family: 'Pretendard', sans-serif; }
+        .f-notosans { font-family: 'Noto Sans KR', sans-serif; }
+        .f-gothic { font-family: 'Nanum Gothic', sans-serif; }
+        .f-orbitron { font-family: 'Orbitron', sans-serif; grid-column: span 3; } 
+
+        input[type="text"], select, textarea {
+            width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border-card);
+            background: var(--bg-input); color: var(--text-main); font-family: inherit; box-sizing: border-box; font-size: 0.95rem;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        input[type="text"]:focus, select:focus, textarea:focus { outline: none; border-color: var(--text-main); }
+        textarea { resize: vertical; min-height: 90px; }
+
+        /* 다크모드 드롭다운 아이콘 반전 (CSS 필터 사용) */
+        body.dark-mode select { filter: invert(1) hue-rotate(180deg); color: #000; background-color: #ddd; border-color: #555; }
+        
+        /* 다크모드 드롭다운 아이콘 대체 처리 (기본 형태 유지) */
         select {
             cursor: pointer; appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000000%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat; background-position: right 12px top 50%; background-size: 9px auto;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23868e96%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 10px auto;
         }
+        body.dark-mode select { filter: none; background-color: var(--bg-input); color: var(--text-main); }
 
         .adjustment-row { display: flex; justify-content: space-between; align-items: center; }
         .adjust-controls { display: flex; align-items: center; gap: 12px; }
         .btn-adjust {
-            background: #fff; border: 1px solid var(--border-card); color: var(--text-main);
-            width: 30px; height: 30px; border-radius: 4px; cursor: pointer;
+            background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-muted);
+            width: 32px; height: 32px; border-radius: 6px; cursor: pointer;
             font-size: 1.1rem; transition: 0.1s; display: flex; justify-content: center; align-items: center; padding: 0;
         }
-        .btn-adjust:hover { background: #000; color: #fff; border-color: #000; }
+        .btn-adjust:hover { background: var(--active-bg); color: var(--active-text); border-color: var(--active-bg); }
         
-        .value-display { font-family: 'Orbitron', sans-serif; font-weight: 900; color: #000; font-size: 0.95rem; min-width: 55px; text-align: center; }
-        .value-display .unit { font-size: 0.7rem; color: var(--text-muted); margin-left: 1px; }
+        .value-display { font-weight: 700; color: var(--accent); font-size: 1rem; min-width: 55px; text-align: center; }
+        .value-display .unit { font-size: 0.75rem; color: var(--text-muted); margin-left: 2px; }
 
-        .toggle-group { display: flex; gap: 6px; }
+        .toggle-group { display: flex; gap: 8px; }
         .btn-toggle {
-            flex: 1; background: #fff; border: 1px solid var(--border-card); color: var(--text-main);
-            padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: 500; text-align: center; transition: 0.1s;
+            flex: 1; background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-muted);
+            padding: 10px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-align: center; transition: 0.1s;
         }
-        .btn-toggle:hover { border-color: #000; }
-        .btn-toggle.active { background: var(--active-bg); color: var(--active-text); border-color: var(--active-bg); font-weight: 700; }
+        .btn-toggle:hover { border-color: var(--text-main); color: var(--text-main); }
+        .btn-toggle.active { color: var(--accent); border-color: var(--accent); font-weight: 700; background-color: rgba(59, 130, 246, 0.05); }
 
-        /* 따옴표 변환 소형 버튼 */
         .btn-action-small {
-            background: #e9ecef; border: none; color: #495057; font-size: 0.7rem; padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: 0.2s;
+            background: var(--bg-input); border: 1px solid var(--border-card); color: var(--text-main);
+            font-size: 0.75rem; padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; gap: 4px; font-weight: 600;
         }
-        .btn-action-small:hover { background: #000; color: #fff; }
+        .btn-action-small:hover { background: var(--active-bg); color: var(--active-text); border-color: var(--active-bg); }
 
-        .download-btn {
-            width: 100%; padding: 16px; background: #000; color: #fff; border: 1px solid #000; border-radius: 10px;
-            font-weight: 900; font-size: 0.95rem; cursor: pointer; font-family: 'Orbitron', sans-serif; letter-spacing: 2px; transition: all 0.1s ease; margin-top: 5px;
+        /* 저장/복사 버튼 그룹 */
+        .action-btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-primary, .btn-secondary {
+            padding: 16px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
+            font-family: 'Orbitron', 'Pretendard', sans-serif; letter-spacing: 1px; transition: all 0.2s ease;
         }
-        .download-btn:hover { background: #333; transform: translateY(-1px); }
+        .btn-primary {
+            flex: 2; background: var(--active-bg); color: var(--active-text); border: none;
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        
+        .btn-secondary {
+            flex: 1; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-card);
+        }
+        .btn-secondary:hover { border-color: var(--text-main); background: var(--bg-card); }
 
         /* ----------------------------------
            오른쪽: 미리보기 (반응형 1:1 캔버스)
         ----------------------------------- */
         .preview-area {
-            position: sticky;
-            top: 50px;
-            width: 100%;
-            max-width: 700px; /* 원본 최대 사이즈 */
+            flex: 1 1 400px; 
+            max-width: 700px;
             display: flex;
             justify-content: center;
+            position: sticky;
+            top: 40px;
         }
 
-        /* 반응형 스케일 래퍼 (이 영역의 크기에 맞춰 내부 700px 캔버스가 작아짐) */
         #capture-area-wrapper {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.08);
-            border-radius: 4px;
-            overflow: hidden; /* 스케일 아웃 시 튀어나가는 부분 숨김 */
+            width: 100%; aspect-ratio: 1 / 1; position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden; background: #fff;
         }
+        /* 다크모드 시 래퍼 그림자 조정 */
+        body.dark-mode #capture-area-wrapper { box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
 
-        /* 실제 700x700 렌더링 캔버스 */
         #capture-area {
-            width: 700px; height: 700px;
-            background-color: #fff;
-            background-size: cover; background-position: center;
-            position: absolute; top: 0; left: 0;
+            width: 700px; height: 700px; background-color: #fff;
+            background-size: cover; background-position: center; position: absolute; top: 0; left: 0;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            box-sizing: border-box;
-            background-image: url('「ARCH」 Quote Neutral A.png'); 
-            padding: 100px 100px;
-            border-style: solid; border-width: 0px; border-color: transparent;
-            transform-origin: top left; /* 스케일 축소의 기준점 */
+            box-sizing: border-box; background-image: url('「ARCH」 Quote Neutral A.png'); 
+            padding: 100px; transform-origin: top left; 
         }
 
-        #text-container {
-            width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2;
-        }
-
-        .quote-main {
-            width: 100%; transition: all 0.1s ease; color: #1a1a1a;
-            font-size: 24px; line-height: 1.5; font-family: 'Pretendard', sans-serif;
-            text-align: center; word-break: keep-all; letter-spacing: 0px; white-space: pre-wrap;
-        }
-
-        .quote-sub {
-            width: 100%; margin-top: 30px; font-size: 18px; z-index: 2;
-            font-family: 'Pretendard', sans-serif; opacity: 0.9; text-align: center;
-        }
+        #text-container { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2; }
+        .quote-main { width: 100%; transition: all 0.1s ease; color: #1a1a1a; font-size: 24px; line-height: 1.5; font-family: 'KoPub Batang', 'KoPubBatang', serif; text-align: center; word-break: keep-all; letter-spacing: 0px; white-space: pre-wrap; }
+        .quote-sub { width: 100%; margin-top: 30px; font-size: 18px; z-index: 2; font-family: inherit; opacity: 0.9; text-align: center; }
         .creator-name { font-weight: 300; }
         .character-name { font-weight: 700; }
-
         .symbol-logo { position: absolute; bottom: 40px; right: 40px; width: 80px; opacity: 0.8; z-index: 2; }
         
-        /* 모바일 대응 */
-        @media (max-width: 1200px) {
-            .preview-area { position: relative; top: 0; }
-        }
+        @media (max-width: 900px) { .preview-area { position: relative; top: 0; } }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
+
+    <button class="theme-toggle-btn" onclick="toggleDarkMode()">
+        <span id="themeIcon">🌙</span> <span id="themeText">DARK MODE</span>
+    </button>
 
     <div class="control-panel">
         <div class="panel-header">
             <h1>ARCH_LOG_CENTER</h1>
+            <hr>
         </div>
 
         <div class="control-card">
-            <span class="card-label">FONT_FACE</span>
-            <select id="fontSelect" onchange="updateStyle()">
-                <option value="'Pretendard', sans-serif" selected>프리텐다드 (Pretendard)</option>
-                <option value="'Noto Sans KR', sans-serif">노토산스 (Noto Sans KR)</option>
-                <option value="'KoPub Batang', 'KoPubBatang', serif">KoPub 바탕 (KoPub Batang)</option>
-            </select>
+            <div class="card-label">텍스트 스타일 (Font)</div>
+            <div class="font-grid" id="fontToggleGroup">
+                <button class="btn-font f-notoserif" onclick="setFont('\'Noto Serif KR\', serif', this)">Noto Serif</button>
+                <button class="btn-font f-kopub active" onclick="setFont('\'KoPub Batang\', \'KoPubBatang\', serif', this)">KoPub 바탕</button>
+                <button class="btn-font f-myeongjo" onclick="setFont('\'Nanum Myeongjo\', serif', this)">나눔명조</button>
+                <button class="btn-font f-pretendard" onclick="setFont('\'Pretendard\', sans-serif', this)">Pretendard</button>
+                <button class="btn-font f-notosans" onclick="setFont('\'Noto Sans KR\', sans-serif', this)">Noto Sans</button>
+                <button class="btn-font f-gothic" onclick="setFont('\'Nanum Gothic\', sans-serif', this)">나눔고딕</button>
+                <button class="btn-font f-orbitron" onclick="setFont('\'Orbitron\', sans-serif', this)">Orbitron (Sci-Fi)</button>
+            </div>
         </div>
 
         <div class="control-card">
-            <span class="card-label">ATTRIBUTE_SYNC</span>
+            <div class="card-label">배경 테마 (Theme)</div>
             <select id="themeSelect" onchange="updateTheme()">
                 <option value="「ARCH」 Quote Neutral A.png" data-color="#1a1a1a" selected>🤍 Neutral A (White)</option>
                 <option value="「ARCH」 Quote Neutral B.png" data-color="#ffffff">🖤 Neutral B (Black)</option>
@@ -240,98 +272,74 @@
             </select>
         </div>
 
-        <div class="control-card">
-            <span class="card-label">LETTER_SPACING</span>
+        <div class="control-card" style="display:flex; flex-direction: column; gap:15px;">
+            <div style="display: flex; gap: 10px;">
+                <div style="flex:1;">
+                    <div class="card-label" style="margin-bottom:8px;">정렬</div>
+                    <div class="toggle-group" id="alignToggleGroup">
+                        <button class="btn-toggle active" onclick="setAlign('center', this)">중앙</button>
+                        <button class="btn-toggle" onclick="setAlign('left', this)">좌측</button>
+                        <button class="btn-toggle" onclick="setAlign('right', this)">우측</button>
+                    </div>
+                </div>
+                <div style="flex:1;">
+                    <div class="card-label" style="margin-bottom:8px;">줄바꿈</div>
+                    <div class="toggle-group" id="wrapToggleGroup">
+                        <button class="btn-toggle active" onclick="setWrap('keep-all', this)">단어</button>
+                        <button class="btn-toggle" onclick="setWrap('break-all', this)">글자</button>
+                    </div>
+                </div>
+            </div>
+
             <div class="adjustment-row">
-                <div class="value-display" id="val-letterSpacing">0.0<span class="unit">px</span></div>
+                <div class="card-label" style="margin:0;">글자 크기</div>
+                <div class="adjust-controls">
+                    <button class="btn-adjust" onclick="adjust('fontSize', -1)">−</button>
+                    <div class="value-display" id="val-fontSize">24<span class="unit">px</span></div>
+                    <button class="btn-adjust" onclick="adjust('fontSize', 1)">+</button>
+                </div>
+            </div>
+            <div class="adjustment-row">
+                <div class="card-label" style="margin:0;">줄 간격</div>
+                <div class="adjust-controls">
+                    <button class="btn-adjust" onclick="adjust('lineHeight', -0.1)">−</button>
+                    <div class="value-display" id="val-lineHeight">1.5<span class="unit">x</span></div>
+                    <button class="btn-adjust" onclick="adjust('lineHeight', 0.1)">+</button>
+                </div>
+            </div>
+            <div class="adjustment-row">
+                <div class="card-label" style="margin:0;">자간 (간격)</div>
                 <div class="adjust-controls">
                     <button class="btn-adjust" onclick="adjust('letterSpacing', -0.2)">−</button>
+                    <div class="value-display" id="val-letterSpacing">0.0<span class="unit">px</span></div>
                     <button class="btn-adjust" onclick="adjust('letterSpacing', 0.2)">+</button>
                 </div>
             </div>
         </div>
 
         <div class="control-card">
-            <span class="card-label">FONT_SIZE</span>
-            <div class="adjustment-row">
-                <div class="value-display" id="val-fontSize">24<span class="unit">px</span></div>
-                <div class="adjust-controls">
-                    <button class="btn-adjust" onclick="adjust('fontSize', -1)">−</button>
-                    <button class="btn-adjust" onclick="adjust('fontSize', 1)">+</button>
-                </div>
+            <div class="card-label">
+                발췌 내용
+                <button class="btn-action-small" onclick="toggleQuotes()">" " ⇄ “ ” 변환</button>
+            </div>
+            <textarea id="mainInput" oninput="updateText()">“이곳은 초인적인 힘을 가진 소수, '센티넬'과 '가이드'가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.”</textarea>
+            <div style="display:flex; gap:10px; margin-top:12px;">
+                <input type="text" id="creatorInput" placeholder="제작자명" oninput="updateText()" value="CherryMango" style="flex:1;">
+                <input type="text" id="characterInput" placeholder="캐릭터명 (자동 굵게)" oninput="updateText()" value="ARCH" style="flex:1.5;">
             </div>
         </div>
 
-        <div class="control-card">
-            <span class="card-label">LINE_HEIGHT</span>
-            <div class="adjustment-row">
-                <div class="value-display" id="val-lineHeight">1.5<span class="unit">x</span></div>
-                <div class="adjust-controls">
-                    <button class="btn-adjust" onclick="adjust('lineHeight', -0.1)">−</button>
-                    <button class="btn-adjust" onclick="adjust('lineHeight', 0.1)">+</button>
-                </div>
-            </div>
+        <div class="action-btn-group">
+            <button class="btn-secondary" id="copyBtn" onclick="copyImage()">이미지 복사</button>
+            <button class="btn-primary" id="saveBtn" onclick="saveImage()">파일로 저장</button>
         </div>
-
-        <div class="control-card">
-            <span class="card-label">TEXT_ALIGN</span>
-            <div class="toggle-group" id="alignToggleGroup">
-                <button class="btn-toggle active" onclick="setAlign('center', this)">중앙</button>
-                <button class="btn-toggle" onclick="setAlign('left', this)">왼쪽</button>
-                <button class="btn-toggle" onclick="setAlign('right', this)">오른쪽</button>
-            </div>
-        </div>
-
-        <div class="control-card">
-            <span class="card-label">WRAP_METHOD</span>
-            <div class="toggle-group" id="wrapToggleGroup">
-                <button class="btn-toggle active" onclick="setWrap('keep-all', this)">단어 단위</button>
-                <button class="btn-toggle" onclick="setWrap('break-all', this)">글자 단위</button>
-            </div>
-        </div>
-
-        <div class="control-card">
-            <span class="card-label">MARGIN_TOP_BOTTOM</span>
-            <div class="adjustment-row">
-                <div class="value-display" id="val-paddingTopBottom">100<span class="unit">px</span></div>
-                <div class="adjust-controls">
-                    <button class="btn-adjust" onclick="adjust('paddingTopBottom', -10)">−</button>
-                    <button class="btn-adjust" onclick="adjust('paddingTopBottom', 10)">+</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="control-card">
-            <span class="card-label">MARGIN_LEFT_RIGHT</span>
-            <div class="adjustment-row">
-                <div class="value-display" id="val-paddingLeftRight">100<span class="unit">px</span></div>
-                <div class="adjust-controls">
-                    <button class="btn-adjust" onclick="adjust('paddingLeftRight', -10)">−</button>
-                    <button class="btn-adjust" onclick="adjust('paddingLeftRight', 10)">+</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="control-card">
-            <span class="card-label">
-                TEXT_CONTENT
-                <button class="btn-action-small" onclick="convertQuotes()">" " ➔ “ ” 변환</button>
-            </span>
-            <textarea id="mainInput" placeholder="발췌할 내용을 입력하세요..." oninput="updateText()">"이곳은 초인적인 힘을 가진 소수, '센티넬'과 '가이드'가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다."</textarea>
-            <div style="display:flex; gap:10px; margin-top:10px;">
-                <input type="text" id="creatorInput" placeholder="제작자명" oninput="updateText()" value="CherryMango" style="width:40%;">
-                <input type="text" id="characterInput" placeholder="캐릭터명 (굵게)" oninput="updateText()" value="ARCH" style="width:60%;">
-            </div>
-        </div>
-
-        <button class="download-btn" onclick="saveImage()">EXTRACT_DATA</button>
     </div>
 
     <div class="preview-area">
         <div id="capture-area-wrapper">
             <div id="capture-area">
                 <div id="text-container">
-                    <div class="quote-main" id="display-main">"이곳은 초인적인 힘을 가진 소수, '센티넬'과 '가이드'가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다."</div>
+                    <div class="quote-main" id="display-main">“이곳은 초인적인 힘을 가진 소수, '센티넬'과 '가이드'가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.”</div>
                     <div class="quote-sub" id="display-sub">
                         <span class="creator-name">CherryMango</span> | <span class="character-name">ARCH</span>
                     </div>
@@ -342,35 +350,51 @@
     </div>
 
     <script>
-        // 상태 관리 (글자크기 24로 시작)
         let state = {
-            fontSize: 24,
-            lineHeight: 1.5,
-            letterSpacing: 0, 
-            textAlign: 'center', 
-            wordBreak: 'keep-all', 
-            paddingTopBottom: 100,
-            paddingLeftRight: 100
+            fontFamily: "'KoPub Batang', 'KoPubBatang', serif",
+            fontSize: 24, lineHeight: 1.5, letterSpacing: 0, 
+            textAlign: 'center', wordBreak: 'keep-all', paddingTopBottom: 100, paddingLeftRight: 100
         };
 
-        // 반응형 캔버스 리사이즈 함수
+        // 다크모드 토글
+        function toggleDarkMode() {
+            const body = document.body;
+            const icon = document.getElementById('themeIcon');
+            const text = document.getElementById('themeText');
+            
+            body.classList.toggle('dark-mode');
+            
+            if(body.classList.contains('dark-mode')) {
+                icon.textContent = "☀️";
+                text.textContent = "LIGHT MODE";
+            } else {
+                icon.textContent = "🌙";
+                text.textContent = "DARK MODE";
+            }
+        }
+
         function resizeCanvas() {
             const wrapper = document.getElementById('capture-area-wrapper');
             const area = document.getElementById('capture-area');
             if(wrapper && area) {
-                // 래퍼의 실제 너비와 원본 너비(700)를 비교하여 비율(scale) 계산
                 const scale = wrapper.clientWidth / 700;
                 area.style.transform = `scale(${scale})`;
             }
         }
-        // 창 크기가 변할 때마다 스케일 조정
         window.addEventListener('resize', resizeCanvas);
+        setTimeout(resizeCanvas, 100);
+
+        function setFont(fontValue, btn) {
+            state.fontFamily = fontValue;
+            const group = document.getElementById('fontToggleGroup');
+            group.querySelectorAll('.btn-font').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            updateStyle();
+        }
 
         function adjust(key, val) {
             state[key] = parseFloat((state[key] + val).toFixed(1));
-            // 글자 크기와 여백 등은 음수가 되지 않도록 방어
             if(key !== 'letterSpacing' && state[key] < 0) state[key] = 0; 
-            
             const displayEl = document.getElementById(`val-${key}`);
             if(displayEl){
                 let unit = key === 'lineHeight' ? 'x' : 'px';
@@ -379,12 +403,19 @@
             updateStyle();
         }
 
-        // 따옴표 자동 변환 함수
-        function convertQuotes() {
+        function toggleQuotes() {
             const textarea = document.getElementById('mainInput');
             let text = textarea.value;
-            // 직선 따옴표를 정규식을 이용해 둥근 스마트 따옴표로 치환
-            text = text.replace(/'([\s\S]*?)'/g, "‘$1’").replace(/"([\s\S]*?)"/g, "“$1”");
+            const hasStraight = /['"]/.test(text);
+            const hasCurved = /[“”‘’]/.test(text);
+
+            if (hasStraight && !hasCurved) {
+                text = text.replace(/'([\s\S]*?)'/g, "‘$1’").replace(/"([\s\S]*?)"/g, "“$1”");
+            } else if (hasCurved) {
+                text = text.replace(/‘([\s\S]*?)’/g, "'$1'").replace(/“([\s\S]*?)”/g, '"$1"');
+            } else {
+                if(text.trim() !== "") text = `“${text.trim()}”`;
+            }
             textarea.value = text;
             updateText();
         }
@@ -410,7 +441,9 @@
             const sub = document.getElementById('display-sub');
             const area = document.getElementById('capture-area');
             const textContainer = document.getElementById('text-container');
-            const font = document.getElementById('fontSelect').value;
+            
+            main.style.fontFamily = state.fontFamily;
+            sub.style.fontFamily = state.fontFamily;
             
             main.style.fontSize = state.fontSize + 'px';
             main.style.lineHeight = state.lineHeight;
@@ -423,16 +456,9 @@
             
             area.style.padding = `${state.paddingTopBottom}px ${state.paddingLeftRight}px`;
             
-            if(state.textAlign === 'left'){
-                textContainer.style.alignItems = 'flex-start';
-            } else if(state.textAlign === 'right'){
-                textContainer.style.alignItems = 'flex-end';
-            } else {
-                textContainer.style.alignItems = 'center';
-            }
-
-            main.style.fontFamily = font;
-            sub.style.fontFamily = font;
+            if(state.textAlign === 'left') textContainer.style.alignItems = 'flex-start';
+            else if(state.textAlign === 'right') textContainer.style.alignItems = 'flex-end';
+            else textContainer.style.alignItems = 'center';
         }
 
         function updateText() {
@@ -452,55 +478,65 @@
             document.getElementById('display-main').style.color = color;
             document.getElementById('display-sub').style.color = color;
 
-            if(bg === '「ARCH」 Quote Neutral B.png') {
-                logo.src = '「ARCH」 Symbol Logo White Ver.png';
-            } else {
-                logo.src = '「ARCH」 Symbol Logo Black Ver.png';
-            }
+            if(bg === '「ARCH」 Quote Neutral B.png') logo.src = '「ARCH」 Symbol Logo White Ver.png';
+            else logo.src = '「ARCH」 Symbol Logo Black Ver.png';
         }
 
+        // 이미지 파일 다운로드
         function saveImage() {
-            const btn = document.querySelector('.download-btn');
+            const btn = document.getElementById('saveBtn');
             const originalText = btn.textContent;
-            btn.textContent = "PROCESSING...";
-            btn.disabled = true;
+            btn.textContent = "생성 중..."; btn.disabled = true;
 
             const area = document.getElementById('capture-area');
-            
-            // html2canvas가 오류 없이 1:1 고화질 캡처를 할 수 있도록 임시로 scale 변환(transform) 해제
             const originalTransform = area.style.transform;
             area.style.transform = 'scale(1)';
             
             setTimeout(() => {
-                html2canvas(area, {
-                    scale: 2, // 해상도 향상
-                    useCORS: true,
-                    backgroundColor: null
-                }).then(canvas => {
+                html2canvas(area, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
                     const link = document.createElement('a');
-                    link.download = `ARCH_EXTRACT_${Date.now()}.png`;
+                    link.download = `ARCH_LOG_${Date.now()}.png`;
                     link.href = canvas.toDataURL();
                     link.click();
-                    
-                    // 복구
                     area.style.transform = originalTransform;
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                }).catch(err => {
-                    console.error("추출 오류:", err);
-                    alert("이미지 추출에 실패했습니다.");
-                    area.style.transform = originalTransform;
-                    btn.textContent = originalText;
-                    btn.disabled = false;
+                    btn.textContent = originalText; btn.disabled = false;
                 });
-            }, 100); // 렌더링 안정화를 위한 짧은 딜레이
+            }, 100);
         }
 
-        // 초기화 실행
-        resizeCanvas();
-        updateStyle();
-        updateTheme();
-        updateText();
+        // 이미지 클립보드 복사
+        function copyImage() {
+            const btn = document.getElementById('copyBtn');
+            const originalText = btn.textContent;
+            btn.textContent = "복사 중..."; btn.disabled = true;
+
+            const area = document.getElementById('capture-area');
+            const originalTransform = area.style.transform;
+            area.style.transform = 'scale(1)';
+            
+            setTimeout(() => {
+                html2canvas(area, { scale: 2, useCORS: true, backgroundColor: null }).then(canvas => {
+                    canvas.toBlob(blob => {
+                        try {
+                            const item = new ClipboardItem({ 'image/png': blob });
+                            navigator.clipboard.write([item]).then(() => {
+                                btn.textContent = "복사 완료!";
+                                setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 2000);
+                            }).catch(err => {
+                                alert("이 브라우저/환경에서는 클립보드 이미지 복사를 지원하지 않습니다. (https 환경 필요)");
+                                btn.textContent = originalText; btn.disabled = false;
+                            });
+                        } catch(e) {
+                            alert("클립보드 API를 지원하지 않는 브라우저입니다.");
+                            btn.textContent = originalText; btn.disabled = false;
+                        }
+                        area.style.transform = originalTransform;
+                    }, 'image/png');
+                });
+            }, 100);
+        }
+
+        updateStyle(); updateTheme(); updateText();
     </script>
 </body>
 </html>
