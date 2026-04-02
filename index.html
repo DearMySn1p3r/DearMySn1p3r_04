@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ARCH_LOG_SYSTEM_v7.0</title>
+    <title>ARCH_LOG_SYSTEM_v7.1</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Noto+Sans+KR:wght@300;700&family=Noto+Serif+KR:wght@300;700&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Gothic:wght@400;700&display=swap">
     <style>
@@ -36,7 +36,8 @@
         }
 
         body {
-            font-family: 'Pretendard', sans-serif;
+            /* 기본 폰트를 노토산스로 변경 */
+            font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
             background-color: var(--bg-body);
             color: var(--text-main);
             margin: 0;
@@ -141,9 +142,6 @@
         input[type="text"]:focus, select:focus, textarea:focus { outline: none; border-color: var(--text-main); }
         textarea { resize: vertical; min-height: 90px; }
 
-        /* 다크모드 드롭다운 아이콘 반전 (CSS 필터 사용) */
-        body.dark-mode select { filter: invert(1) hue-rotate(180deg); color: #000; background-color: #ddd; border-color: #555; }
-        
         /* 다크모드 드롭다운 아이콘 대체 처리 (기본 형태 유지) */
         select {
             cursor: pointer; appearance: none;
@@ -183,7 +181,7 @@
         .action-btn-group { display: flex; gap: 10px; margin-top: 10px; }
         .btn-primary, .btn-secondary {
             padding: 16px; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer;
-            font-family: 'Orbitron', 'Pretendard', sans-serif; letter-spacing: 1px; transition: all 0.2s ease;
+            font-family: 'Orbitron', 'Noto Sans KR', 'Pretendard', sans-serif; letter-spacing: 1px; transition: all 0.2s ease;
         }
         .btn-primary {
             flex: 2; background: var(--active-bg); color: var(--active-text); border: none;
@@ -223,7 +221,7 @@
         }
 
         #text-container { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2; }
-        .quote-main { width: 100%; transition: all 0.1s ease; color: #1a1a1a; font-size: 24px; line-height: 1.5; font-family: 'KoPub Batang', 'KoPubBatang', serif; text-align: center; word-break: keep-all; letter-spacing: 0px; white-space: pre-wrap; }
+        .quote-main { width: 100%; transition: all 0.1s ease; color: #1a1a1a; font-size: 24px; line-height: 1.5; font-family: 'Noto Sans KR', sans-serif; text-align: center; word-break: keep-all; letter-spacing: 0px; white-space: pre-wrap; }
         .quote-sub { width: 100%; margin-top: 30px; font-size: 18px; z-index: 2; font-family: inherit; opacity: 0.9; text-align: center; }
         .creator-name { font-weight: 300; }
         .character-name { font-weight: 700; }
@@ -249,10 +247,10 @@
             <div class="card-label">텍스트 스타일 (Font)</div>
             <div class="font-grid" id="fontToggleGroup">
                 <button class="btn-font f-notoserif" onclick="setFont('\'Noto Serif KR\', serif', this)">Noto Serif</button>
-                <button class="btn-font f-kopub active" onclick="setFont('\'KoPub Batang\', \'KoPubBatang\', serif', this)">KoPub 바탕</button>
+                <button class="btn-font f-kopub" onclick="setFont('\'KoPub Batang\', \'KoPubBatang\', serif', this)">KoPub 바탕</button>
                 <button class="btn-font f-myeongjo" onclick="setFont('\'Nanum Myeongjo\', serif', this)">나눔명조</button>
                 <button class="btn-font f-pretendard" onclick="setFont('\'Pretendard\', sans-serif', this)">Pretendard</button>
-                <button class="btn-font f-notosans" onclick="setFont('\'Noto Sans KR\', sans-serif', this)">Noto Sans</button>
+                <button class="btn-font f-notosans active" onclick="setFont('\'Noto Sans KR\', sans-serif', this)">Noto Sans</button>
                 <button class="btn-font f-gothic" onclick="setFont('\'Nanum Gothic\', sans-serif', this)">나눔고딕</button>
                 <button class="btn-font f-orbitron" onclick="setFont('\'Orbitron\', sans-serif', this)">Orbitron (Sci-Fi)</button>
             </div>
@@ -265,10 +263,10 @@
                 <option value="「ARCH」 Quote Neutral B.png" data-color="#ffffff">🖤 Neutral B (Black)</option>
                 <option value="「ARCH」 Quote Pyre.png" data-color="#1a1a1a">🔥 불 (Pyre)</option>
                 <option value="「ARCH」 Quote Aqua.png" data-color="#1a1a1a">💧 물 (Aqua)</option>
-                <option value="「ARCH» Quote Verde.png" data-color="#1a1a1a">🌿 풀 (Verde)</option>
-                <option value="「ARCH» Quote Fulmen.png" data-color="#1a1a1a">⚡ 번개 (Fulmen)</option>
-                <option value="「ARCH» Quote Aero.png" data-color="#1a1a1a">💨 바람 (Aero)</option>
+                <option value="「ARCH」 Quote Verde.png" data-color="#1a1a1a">🌿 풀 (Verde)</option>
+                <option value="「ARCH」 Quote Fulmen.png" data-color="#1a1a1a">⚡ 번개 (Fulmen)</option>
                 <option value="Buron (Glacies).png" data-color="#1a1a1a">❄️ 얼음 (Glacies)</option>
+                <option value="「ARCH」 Quote Aero.png" data-color="#1a1a1a">💨 바람 (Aero)</option>
             </select>
         </div>
 
@@ -350,8 +348,9 @@
     </div>
 
     <script>
+        // 상태 관리 (기본 폰트를 Noto Sans KR로 변경)
         let state = {
-            fontFamily: "'KoPub Batang', 'KoPubBatang', serif",
+            fontFamily: "'Noto Sans KR', sans-serif",
             fontSize: 24, lineHeight: 1.5, letterSpacing: 0, 
             textAlign: 'center', wordBreak: 'keep-all', paddingTopBottom: 100, paddingLeftRight: 100
         };
