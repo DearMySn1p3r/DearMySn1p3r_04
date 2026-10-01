@@ -1,572 +1,420 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ARCH LOG SYSTEM</title>
-    <link rel="icon" type="image/png" href="「ARCH」 Symbol Logo Black Ver.png">
-    <link rel="apple-touch-icon" href="「ARCH」 Symbol Logo Black Ver.png">
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Noto+Sans+KR:wght@300;700&family=Noto+Serif+KR:wght@300;700&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Gothic:wght@400;700&display=swap">
-    <style>
-        @import url('https://cdn.jsdelivr.net/font-kopub/1.0/kopubbatang.css');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ARCH Log System</title>
+<link rel="icon" type="image/png" href="「ARCH」 Symbol Logo Black Ver.png">
+<link rel="apple-touch-icon" href="「ARCH」 Symbol Logo Black Ver.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&family=Noto+Serif+KR:wght@300;400;700&family=Nanum+Myeongjo:wght@400;700&family=Nanum+Gothic:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/font-kopub/1.0/kopubbatang.css">
+<style>
+:root{
+  --bg:#f6f6f5;--panel:#fff;--ink:#0b0b0b;--t2:#555;--t3:#8c8c8c;--t4:#bdbdbd;
+  --hl:#ececec;--hl2:#dcdcdc;--sans:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;--ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+body{min-height:100vh;display:flex;flex-direction:column;
+  background-image:radial-gradient(circle,rgba(0,0,0,.07) 1px,transparent 1.2px);background-size:22px 22px;background-position:-11px -11px}
+button,input,select,textarea{font:inherit;color:inherit;background:none;border:0;outline:0}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.lbl{font:500 10px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--t3)}
 
-        :root {
-            /* 라이트 모드 (기본) */
-            --bg-body: #f4f5f7;
-            --bg-card: #ffffff;
-            --text-main: #1a1a1a;
-            --text-muted: #868e96;
-            --border-card: #dee2e6;
-            --bg-input: #f8f9fa;
-            --active-bg: #212529;
-            --active-text: #ffffff;
-            --accent: #3b82f6; 
-        }
+/* header */
+header{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(255,255,255,.82);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--hl);position:sticky;top:0;z-index:10}
+.brand{display:flex;align-items:center;gap:12px}
+.brand img{width:22px;height:22px;object-fit:contain}
+.brand .wm{font:700 14px/1 var(--sans);letter-spacing:.42em;margin-right:-.42em}
+.brand .sep{width:1px;height:14px;background:var(--hl2)}
+.hd-r{display:flex;align-items:center;gap:18px}
+.dot{display:inline-flex;align-items:center;gap:7px}
+.dot::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--ink);animation:blink 1.6s steps(2) infinite}
+@keyframes blink{50%{opacity:.15}}
+#clock{font:500 11px var(--mono);letter-spacing:.08em}
 
-        /* 다크 모드 (블랙 테마) 설정 */
-        body.dark-mode {
-            --bg-body: #121212;
-            --bg-card: #1e1e1e;
-            --text-main: #f8f9fa;
-            --text-muted: #adb5bd;
-            --border-card: #333333;
-            --bg-input: #2b2b2b;
-            --active-bg: #f8f9fa;
-            --active-text: #121212;
-            --accent: #60a5fa;
-        }
+/* layout */
+main{flex:1;display:grid;grid-template-columns:400px minmax(0,1fr);gap:28px;padding:28px;max-width:1320px;width:100%;margin:0 auto;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--hl);border-radius:18px;padding:24px 24px 22px;animation:rise .9s var(--ease) both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.sec{padding:18px 0;border-top:1px solid var(--hl)}
+.sec:first-child{border-top:0;padding-top:0}
+.sec-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px}
+.sec-h .lbl b{color:var(--ink);font-weight:500;margin-right:8px}
+.tl{font:500 10px var(--mono);letter-spacing:.12em;color:var(--t3);transition:color .2s;white-space:nowrap}
+.tl:hover{color:var(--ink)}
+.tls{display:flex;gap:14px}
 
-        body {
-            font-family: 'Noto Sans KR', 'Pretendard', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            display: flex;
-            flex-wrap: wrap; 
-            justify-content: center;
-            align-items: flex-start;
-            padding: 40px 20px;
-            min-height: 100vh;
-            gap: 30px;
-            box-sizing: border-box;
-            transition: background-color 0.3s, color 0.3s;
-        }
+/* segmented */
+.seg{position:relative;display:grid;border:1px solid var(--hl2);border-radius:9px;padding:3px;height:38px}
+.seg button{position:relative;z-index:1;font-size:12.5px;color:var(--t3);transition:color .3s;white-space:nowrap}
+.seg button small{font:500 9.5px var(--mono);letter-spacing:.06em;margin-left:5px;opacity:.7}
+.seg button.on{color:#fff}
+.seg i{position:absolute;top:3px;bottom:3px;left:3px;border-radius:6px;background:var(--ink);transition:transform .45s var(--ease),width .45s var(--ease)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fld{margin-bottom:12px}.fld:last-child{margin-bottom:0}
+.fld>.lbl{display:block;margin-bottom:8px}
+.kl{display:block;font-size:12px;color:var(--t2);margin-bottom:8px}
 
-        /* 다크모드 토글 버튼 */
-        .theme-toggle-btn {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            background: var(--bg-card);
-            border: 1px solid var(--border-card);
-            color: var(--text-main);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            font-weight: 700;
-            font-size: 0.85rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: all 0.2s ease;
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .theme-toggle-btn:hover { border-color: var(--text-main); }
+/* theme chips */
+.themes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.themes button{display:flex;align-items:center;gap:7px;height:36px;padding:0 10px;border:1px solid var(--hl2);border-radius:9px;font-size:12px;color:var(--t2);transition:all .2s}
+.themes button i{width:10px;height:10px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.themes button:hover{border-color:#999;color:var(--ink)}
+.themes button.on{border-color:var(--ink);color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 
-        /* ----------------------------------
-           왼쪽: 컨트롤 패널
-        ----------------------------------- */
-        .control-panel {
-            flex: 1 1 350px;
-            min-width: 0; /* 화면 밖으로 삐져나가는 현상 방지 */
-            max-width: 480px;
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border: 1px solid var(--border-card);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            box-sizing: border-box;
-            transition: background-color 0.3s, border-color 0.3s;
-        }
+/* fonts */
+.fonts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.fonts button{height:38px;border:1px solid var(--hl2);border-radius:9px;font-size:13px;color:var(--t2);transition:all .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 6px}
+.fonts button:hover{border-color:#999;color:var(--ink)}
+.fonts button.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.fonts button.wide{grid-column:span 3}
 
-        .panel-header { text-align: center; margin-bottom: 5px; }
-        .panel-header h1 { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; letter-spacing: 4px; margin: 0; color: var(--text-main); }
-        .panel-header hr { width: 40px; border: none; border-top: 2px solid var(--text-main); margin: 10px auto 0; }
+/* steppers */
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.st{display:flex;align-items:center;justify-content:space-between;border:1px solid var(--hl2);border-radius:9px;height:40px;padding:0 4px 0 12px}
+.st span{font-size:12px;color:var(--t2)}
+.st .ctl{display:flex;align-items:center}
+.st button{width:28px;height:28px;border-radius:6px;font:500 14px var(--mono);color:var(--t2);transition:background .15s,color .15s;touch-action:manipulation;user-select:none}
+.st button:hover{background:var(--ink);color:#fff}
+.st output{font:500 11px var(--mono);min-width:44px;text-align:center}
+.fitrow{display:flex;gap:8px;margin-top:10px}
+.mini{flex:1;height:36px;border:1px solid var(--hl2);border-radius:9px;font-size:12px;color:var(--t2);transition:all .2s}
+.mini:hover{border-color:var(--ink);color:var(--ink)}
+.warn{display:none;margin-top:10px;font-size:11.5px;line-height:1.55;color:#b4231c;background:#fff3f2;border:1px solid #f6d3d0;border-radius:8px;padding:9px 11px}
+.warn.on{display:block}
 
-        .control-card {
-            background: var(--bg-card); 
-            border-radius: 10px;
-            padding: 15px;
-            border: 1px solid var(--border-card);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
+/* text */
+textarea{width:100%;padding:12px 13px;border:1px solid var(--hl2);border-radius:9px;font-size:14px;line-height:1.65;resize:vertical;min-height:120px;transition:border-color .2s,box-shadow .2s}
+.inp{width:100%;height:40px;padding:0 12px;border:1px solid var(--hl2);border-radius:9px;font-size:14px;transition:border-color .2s,box-shadow .2s}
+.inp::placeholder,textarea::placeholder{color:var(--t4)}
+.inp:focus,textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px rgba(0,0,0,.05)}
+.cnt{display:flex;justify-content:space-between;align-items:center;margin:8px 0 12px}
+.cred{display:grid;grid-template-columns:1fr 1.3fr;gap:8px}
 
-        .card-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            font-weight: 700;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+/* actions */
+.acts{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-top:20px}
+.b2{height:50px;border:1px solid var(--hl2);border-radius:11px;font-size:14px;font-weight:600;transition:all .2s}
+.b2:hover{border-color:var(--ink)}
+.save{position:relative;height:50px;border-radius:11px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;
+  font-size:14px;font-weight:600;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.save:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,0,0,.14)}
+.save .lbl{color:rgba(255,255,255,.5)}
+.save::after{content:'';position:absolute;top:0;bottom:0;left:-40%;width:30%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.18),transparent);transform:skewX(-20deg);transition:left .7s var(--ease)}
+.save:hover::after{left:120%}
+.busy{pointer-events:none;opacity:.6}
 
-        /* 폰트 선택 그리드 */
-        .font-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-        .btn-font {
-            background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-muted);
-            padding: 10px 5px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; text-align: center; transition: 0.2s;
-        }
-        .btn-font:hover { border-color: var(--text-muted); color: var(--text-main); }
-        .btn-font.active {
-            border-color: var(--accent); color: var(--accent); background-color: rgba(59, 130, 246, 0.05); font-weight: 600;
-        }
+/* preview */
+.stage{position:sticky;top:86px;animation:rise .9s var(--ease) .08s both;min-width:0}
+.stage-h{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;gap:12px}
+.stage-h h2{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:8px}
+.frame{position:relative;padding:22px;border:1px solid var(--hl);border-radius:20px;background:#fff;display:flex;justify-content:center}
+#cv{display:block;width:100%;height:auto;box-shadow:0 20px 50px rgba(0,0,0,.12);border-radius:4px;background:#fff}
+.meta{display:flex;justify-content:space-between;margin-top:14px;padding:0 2px;gap:12px}
 
-        .f-notoserif { font-family: 'Noto Serif KR', serif; }
-        .f-kopub { font-family: 'KoPub Batang', 'KoPubBatang', serif; }
-        .f-myeongjo { font-family: 'Nanum Myeongjo', serif; }
-        .f-pretendard { font-family: 'Pretendard', sans-serif; }
-        .f-notosans { font-family: 'Noto Sans KR', sans-serif; }
-        .f-gothic { font-family: 'Nanum Gothic', sans-serif; }
-        .f-orbitron { font-family: 'Orbitron', sans-serif; grid-column: span 3; } 
+/* toast */
+#toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,16px);background:var(--ink);color:#fff;padding:11px 16px;border-radius:10px;
+  font:500 10.5px var(--mono);letter-spacing:.16em;display:flex;align-items:center;gap:9px;opacity:0;pointer-events:none;transition:all .45s var(--ease);z-index:30;white-space:nowrap}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#toast img{width:13px;height:13px}
+footer{padding:18px 28px 26px;display:flex;justify-content:space-between;max-width:1320px;width:100%;margin:0 auto}
 
-        input[type="text"], select, textarea {
-            width: 100%; padding: 12px; border-radius: 6px; border: 1px solid var(--border-card);
-            background: var(--bg-input); color: var(--text-main); font-family: inherit; box-sizing: border-box; font-size: 0.95rem;
-            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-        }
-        input[type="text"]:focus, select:focus, textarea:focus { outline: none; border-color: var(--text-main); }
-        textarea { resize: vertical; min-height: 80px; }
+/* boot */
+#boot{position:fixed;inset:0;z-index:50;background:#fff;display:grid;place-items:center;transition:opacity .6s var(--ease),visibility .6s}
+#boot.off{opacity:0;visibility:hidden}
+#boot .b{display:flex;flex-direction:column;align-items:center;gap:16px}
+#boot img{width:38px;height:38px;animation:bl 1s var(--ease) both}
+#boot .ln{width:120px;height:1px;background:var(--hl);overflow:hidden}
+#boot .ln i{display:block;height:100%;background:var(--ink);animation:ld .8s var(--ease) .1s both}
+@keyframes bl{from{opacity:0;transform:scale(.85)}}
+@keyframes ld{from{transform:translateX(-100%)}}
 
-        /* 다크모드 드롭다운 아이콘 대체 처리 */
-        select {
-            cursor: pointer; appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23868e96%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 10px auto;
-        }
-        body.dark-mode select { filter: none; background-color: var(--bg-input); color: var(--text-main); }
-
-        .adjustment-row { display: flex; justify-content: space-between; align-items: center; }
-        .adjust-controls { display: flex; align-items: center; gap: 10px; }
-        .btn-adjust {
-            background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-muted);
-            width: 30px; height: 30px; border-radius: 6px; cursor: pointer;
-            font-size: 1.1rem; transition: 0.1s; display: flex; justify-content: center; align-items: center; padding: 0;
-        }
-        .btn-adjust:hover { background: var(--active-bg); color: var(--active-text); border-color: var(--active-bg); }
-        
-        .value-display { font-weight: 700; color: var(--accent); font-size: 0.95rem; min-width: 50px; text-align: center; }
-        .value-display .unit { font-size: 0.7rem; color: var(--text-muted); margin-left: 2px; }
-
-        .toggle-group { display: flex; gap: 6px; }
-        .btn-toggle {
-            flex: 1; background: var(--bg-card); border: 1px solid var(--border-card); color: var(--text-muted);
-            padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; text-align: center; transition: 0.1s;
-        }
-        .btn-toggle:hover { border-color: var(--text-main); color: var(--text-main); }
-        .btn-toggle.active { color: var(--accent); border-color: var(--accent); font-weight: 700; background-color: rgba(59, 130, 246, 0.05); }
-
-        .btn-action-small {
-            background: var(--bg-input); border: 1px solid var(--border-card); color: var(--text-main);
-            font-size: 0.75rem; padding: 6px 12px; border-radius: 6px; cursor: pointer; transition: 0.2s;
-            display: flex; align-items: center; gap: 4px; font-weight: 600;
-        }
-        .btn-action-small:hover { background: var(--active-bg); color: var(--active-text); border-color: var(--active-bg); }
-
-        /* 버튼 그룹 */
-        .action-btn-group { display: flex; gap: 8px; margin-top: 5px; }
-        .btn-primary, .btn-secondary {
-            padding: 14px 10px; border-radius: 10px; font-weight: 700; font-size: 0.9rem; cursor: pointer;
-            font-family: 'Orbitron', 'Noto Sans KR', sans-serif; letter-spacing: 0.5px; transition: all 0.2s ease;
-        }
-        .btn-primary { flex: 2; background: var(--active-bg); color: var(--active-text); border: none; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-        
-        .btn-secondary { flex: 1; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--border-card); }
-        .btn-secondary:hover { border-color: var(--text-main); background: var(--bg-card); }
-
-        /* ----------------------------------
-           오른쪽: 미리보기 (반응형 1:1 캔버스)
-        ----------------------------------- */
-        .preview-area {
-            flex: 1 1 350px; 
-            min-width: 0; /* 화면 밖으로 삐져나가는 현상 완벽 방지 */
-            max-width: 700px;
-            display: flex;
-            justify-content: center;
-            position: sticky;
-            top: 40px;
-        }
-
-        #capture-area-wrapper {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            overflow: hidden;
-            background: #fff;
-        }
-        body.dark-mode #capture-area-wrapper { box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
-
-        #capture-area {
-            width: 700px; height: 700px; background-color: #fff;
-            background-size: cover; background-position: center; position: absolute; top: 0; left: 0;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            box-sizing: border-box; background-image: url('「ARCH」 Quote Neutral A.png'); 
-            padding: 100px; transform-origin: top left; 
-        }
-
-        #text-container { width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 2; }
-        .quote-main { width: 100%; transition: all 0.1s ease; color: #1a1a1a; font-size: 24px; line-height: 1.5; font-family: 'Noto Sans KR', sans-serif; text-align: center; word-break: keep-all; letter-spacing: 0px; white-space: pre-wrap; }
-        .quote-sub { width: 100%; margin-top: 30px; font-size: 18px; z-index: 2; font-family: inherit; opacity: 0.9; text-align: center; }
-        .creator-name { font-weight: 300; }
-        .character-name { font-weight: 700; }
-        .symbol-logo { position: absolute; bottom: 40px; right: 40px; width: 80px; opacity: 0.8; z-index: 2; }
-        
-        @media (max-width: 900px) { 
-            .preview-area { position: relative; top: 0; margin-top: 10px; }
-            body { padding: 20px 15px; }
-        }
-    </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+@media (max-width:980px){
+  main{grid-template-columns:1fr;padding:16px;gap:16px}
+  .panel{order:2;padding:22px 18px 20px}
+  .stage{order:1;position:sticky;top:calc(54px + env(safe-area-inset-top));z-index:5;background:var(--bg);margin:-16px -16px 0;padding:12px 16px 10px;border-bottom:1px solid var(--hl)}
+  .stage-h{display:none}
+  .meta{margin-top:8px}
+  header{padding:0 16px;padding-top:env(safe-area-inset-top);height:calc(54px + env(safe-area-inset-top))}
+  .hd-r .dot,.brand .sep,.brand .ttl{display:none}
+  .frame{padding:10px;border-radius:16px}
+  #cv{max-height:42vh;width:auto;max-width:100%}
+  .inp,textarea{font-size:16px}
+  footer{padding:6px 16px calc(22px + env(safe-area-inset-bottom))}
+  #toast{bottom:auto;top:calc(64px + env(safe-area-inset-top))}
+}
+@media (max-width:420px){.themes{grid-template-columns:repeat(2,1fr)}.meta .hide-s{display:none}.save .lbl{display:none}.save{justify-content:center}footer .lbl:last-child{display:none}.st{padding-left:10px}.st button{width:26px}.st output{min-width:40px}}
+.st span{white-space:nowrap}
+footer .lbl{white-space:nowrap}
+</style>
 </head>
 <body>
+<div id="boot"><div class="b"><img src="「ARCH」 Symbol Logo Black Ver.png" alt=""><div class="ln"><i></i></div><span class="lbl">Log Archive</span></div></div>
 
-    <button class="theme-toggle-btn" onclick="toggleDarkMode()">
-        <span id="themeIcon">🌙</span> <span id="themeText">DARK MODE</span>
-    </button>
+<header>
+  <div class="brand"><img src="「ARCH」 Symbol Logo Black Ver.png" alt="ARCH"><span class="wm">ARCH</span><span class="sep"></span><span class="lbl ttl">Log System</span></div>
+  <div class="hd-r"><span class="lbl dot">Archive Online</span><span id="clock">00:00:00</span></div>
+</header>
 
-    <div class="control-panel">
-        <div class="panel-header">
-            <h1>ARCH_LOG_CENTER</h1>
-            <hr>
-        </div>
-
-        <div class="control-card">
-            <div class="card-label">텍스트 스타일 (Font)</div>
-            <div class="font-grid" id="fontToggleGroup">
-                <button class="btn-font f-notoserif" onclick="setFont('\'Noto Serif KR\', serif', this)">Noto Serif</button>
-                <button class="btn-font f-kopub" onclick="setFont('\'KoPub Batang\', \'KoPubBatang\', serif', this)">KoPub 바탕</button>
-                <button class="btn-font f-myeongjo" onclick="setFont('\'Nanum Myeongjo\', serif', this)">나눔명조</button>
-                <button class="btn-font f-pretendard" onclick="setFont('\'Pretendard\', sans-serif', this)">Pretendard</button>
-                <button class="btn-font f-notosans active" onclick="setFont('\'Noto Sans KR\', sans-serif', this)">Noto Sans</button>
-                <button class="btn-font f-gothic" onclick="setFont('\'Nanum Gothic\', sans-serif', this)">나눔고딕</button>
-                <button class="btn-font f-orbitron" onclick="setFont('\'Orbitron\', sans-serif', this)">Orbitron (Sci-Fi)</button>
-            </div>
-        </div>
-
-        <div class="control-card">
-            <div class="card-label">배경 테마 (Theme)</div>
-            <select id="themeSelect" onchange="updateTheme()">
-                <option value="「ARCH」 Quote Neutral A.png" data-color="#1a1a1a" selected>🤍 무속성 (White)</option>
-                <option value="「ARCH」 Quote Neutral B.png" data-color="#ffffff">🖤 무속성 (Black)</option>
-                <option value="「ARCH」 Quote Pyre.png" data-color="#1a1a1a">🔥 불 (Pyre)</option>
-                <option value="「ARCH」 Quote Aqua.png" data-color="#1a1a1a">💧 물 (Aqua)</option>
-                <option value="「ARCH」 Quote Verde.png" data-color="#1a1a1a">🌿 풀 (Verde)</option>
-                <option value="「ARCH」 Quote Fulmen.png" data-color="#1a1a1a">⚡ 번개 (Fulmen)</option>
-                <option value="「ARCH」 Quote Glacies.png" data-color="#1a1a1a">❄️ 얼음 (Glacies)</option>
-                <option value="「ARCH」 Quote Aero.png" data-color="#1a1a1a">💨 바람 (Aero)</option>
-            </select>
-        </div>
-
-        <div class="control-card" style="display:flex; flex-direction: column; gap:12px;">
-            <div style="display: flex; gap: 10px;">
-                <div style="flex:1;">
-                    <div class="card-label" style="margin-bottom:8px;">정렬</div>
-                    <div class="toggle-group" id="alignToggleGroup">
-                        <button class="btn-toggle active" onclick="setAlign('center', this)">중앙</button>
-                        <button class="btn-toggle" onclick="setAlign('left', this)">좌측</button>
-                        <button class="btn-toggle" onclick="setAlign('right', this)">우측</button>
-                    </div>
-                </div>
-                <div style="flex:1;">
-                    <div class="card-label" style="margin-bottom:8px;">줄바꿈</div>
-                    <div class="toggle-group" id="wrapToggleGroup">
-                        <button class="btn-toggle active" onclick="setWrap('keep-all', this)">단어</button>
-                        <button class="btn-toggle" onclick="setWrap('break-all', this)">글자</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="adjustment-row">
-                <div class="card-label" style="margin:0;">글자 크기</div>
-                <div class="adjust-controls">
-                    <button class="btn-adjust" onclick="adjust('fontSize', -1)">−</button>
-                    <div class="value-display" id="val-fontSize">24<span class="unit">px</span></div>
-                    <button class="btn-adjust" onclick="adjust('fontSize', 1)">+</button>
-                </div>
-            </div>
-            <div class="adjustment-row">
-                <div class="card-label" style="margin:0;">줄 간격</div>
-                <div class="adjust-controls">
-                    <button class="btn-adjust" onclick="adjust('lineHeight', -0.1)">−</button>
-                    <div class="value-display" id="val-lineHeight">1.5<span class="unit">x</span></div>
-                    <button class="btn-adjust" onclick="adjust('lineHeight', 0.1)">+</button>
-                </div>
-            </div>
-            <div class="adjustment-row">
-                <div class="card-label" style="margin:0;">자간 (간격)</div>
-                <div class="adjust-controls">
-                    <button class="btn-adjust" onclick="adjust('letterSpacing', -0.2)">−</button>
-                    <div class="value-display" id="val-letterSpacing">0.0<span class="unit">px</span></div>
-                    <button class="btn-adjust" onclick="adjust('letterSpacing', 0.2)">+</button>
-                </div>
-            </div>
-        </div>
-
-        <div class="control-card">
-            <div class="card-label">
-                발췌 내용
-                <button class="btn-action-small" onclick="toggleQuotes()">" " ⇄ “ ” 변환</button>
-            </div>
-            <textarea id="mainInput" oninput="updateText()">“이곳은 초인적인 힘을 가진 소수, ‘센티넬’과 ‘가이드’가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.”</textarea>
-            <div style="display:flex; gap:10px; margin-top:10px;">
-                <input type="text" id="creatorInput" placeholder="제작자명" oninput="updateText()" value="CherryMango" style="flex:1;">
-                <input type="text" id="characterInput" placeholder="캐릭터명 (자동 굵게)" oninput="updateText()" value="ARCH" style="flex:1.5;">
-            </div>
-        </div>
-
-        <div class="action-btn-group">
-            <button class="btn-secondary" id="copyBtn" onclick="copyImage()">복사</button>
-            <button class="btn-primary" id="saveBtn" onclick="saveImage()">파일로 저장</button>
-        </div>
+<main>
+  <section class="panel">
+    <div class="sec">
+      <div class="sec-h"><span class="lbl"><b>01</b>Theme</span></div>
+      <div class="themes" id="themes"></div>
     </div>
 
-    <div class="preview-area">
-        <div id="capture-area-wrapper">
-            <div id="capture-area">
-                <div id="text-container">
-                    <div class="quote-main" id="display-main">“이곳은 초인적인 힘을 가진 소수, ‘센티넬’과 ‘가이드’가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.”</div>
-                    <div class="quote-sub" id="display-sub">
-                        <span class="creator-name">CherryMango</span> | <span class="character-name">ARCH</span>
-                    </div>
-                </div>
-                <img src="「ARCH」 Symbol Logo Black Ver.png" id="logoDisplay" class="symbol-logo">
-            </div>
-        </div>
+    <div class="sec">
+      <div class="sec-h"><span class="lbl"><b>02</b>Typeface</span></div>
+      <div class="fonts" id="fonts"></div>
     </div>
 
-    <script>
-        // 전역 상태 설정
-        window.state = {
-            fontFamily: "'Noto Sans KR', sans-serif",
-            fontSize: 24, lineHeight: 1.5, letterSpacing: 0, 
-            textAlign: 'center', wordBreak: 'keep-all', paddingTopBottom: 100, paddingLeftRight: 100
-        };
+    <div class="sec">
+      <div class="sec-h"><span class="lbl"><b>03</b>Layout</span><button class="tl" id="resetTune">RESET ↺</button></div>
+      <div class="row fld">
+        <div><span class="kl">정렬</span><div class="seg" id="segAlign" style="grid-template-columns:repeat(3,1fr)"><button data-v="left">왼쪽</button><button class="on" data-v="center">가운데</button><button data-v="right">오른쪽</button><i></i></div></div>
+        <div><span class="kl">세로 위치</span><div class="seg" id="segV" style="grid-template-columns:repeat(3,1fr)"><button data-v="top">위</button><button class="on" data-v="middle">가운데</button><button data-v="bottom">아래</button><i></i></div></div>
+      </div>
+      <div class="fld"><span class="kl">줄바꿈</span><div class="seg" id="segWrap" style="grid-template-columns:1fr 1fr"><button class="on" data-v="word">단어 단위</button><button data-v="char">글자 단위</button><i></i></div></div>
+      <div class="steps">
+        <div class="st"><span>글자 크기</span><div class="ctl"><button data-k="fs" data-d="-1">−</button><output id="o-size"></output><button data-k="fs" data-d="1">+</button></div></div>
+        <div class="st"><span>줄 간격</span><div class="ctl"><button data-k="lh" data-d="-0.05">−</button><output id="o-lh"></output><button data-k="lh" data-d="0.05">+</button></div></div>
+        <div class="st"><span>자간</span><div class="ctl"><button data-k="ls" data-d="-0.2">−</button><output id="o-ls"></output><button data-k="ls" data-d="0.2">+</button></div></div>
+        <div class="st"><span>여백</span><div class="ctl"><button data-k="pad" data-d="-4">−</button><output id="o-pad"></output><button data-k="pad" data-d="4">+</button></div></div>
+      </div>
+      <div class="fitrow"><button class="mini" id="fitBtn">카드에 맞추기</button></div>
+      <div class="warn" id="warn">글이 카드에 다 들어가지 않아 아래가 잘렸어요. ‘카드에 맞추기’를 누르거나 글자 크기·여백을 줄여 보세요.</div>
+    </div>
 
-        // 다크모드 토글
-        window.toggleDarkMode = function() {
-            const body = document.body;
-            const icon = document.getElementById('themeIcon');
-            const text = document.getElementById('themeText');
-            body.classList.toggle('dark-mode');
-            if(body.classList.contains('dark-mode')) {
-                icon.textContent = "☀️"; text.textContent = "LIGHT MODE";
-            } else {
-                icon.textContent = "🌙"; text.textContent = "DARK MODE";
-            }
-        };
+    <div class="sec">
+      <div class="sec-h"><span class="lbl"><b>04</b>Excerpt</span><span class="tls"><button class="tl" id="qBtn">" " ⇄ “ ”</button><button class="tl" id="tidyBtn">다듬기</button><button class="tl" id="undoBtn">되돌리기</button></span></div>
+      <textarea id="txt" rows="5" placeholder="발췌할 내용을 입력하세요">“이곳은 초인적인 힘을 가진 소수, ‘센티넬’과 ‘가이드’가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.”</textarea>
+      <div class="cnt"><span class="kl" id="cnt" style="margin:0;color:var(--t3)">0자 · 0줄</span><button class="tl" id="clrBtn">CLEAR ×</button></div>
+      <div class="cred"><input class="inp" id="creator" placeholder="제작자명" maxlength="24" value="CherryMango"><input class="inp" id="chara" placeholder="캐릭터명 (굵게 표시)" maxlength="24" value="ARCH"></div>
+    </div>
 
-        // 완벽한 반응형 캔버스 스케일링 (버그 수정됨)
-        function applyScale() {
-            const wrapper = document.getElementById('capture-area-wrapper');
-            const area = document.getElementById('capture-area');
-            if(wrapper && area) {
-                const rect = wrapper.getBoundingClientRect();
-                const scale = rect.width / 700;
-                area.style.transform = `scale(${scale})`;
-            }
-        }
-        
-        // ResizeObserver를 통해 크기 변경 시 실시간으로 부드럽게 감지
-        window.addEventListener('DOMContentLoaded', () => {
-            const wrapper = document.getElementById('capture-area-wrapper');
-            if(wrapper) {
-                const ro = new ResizeObserver(() => applyScale());
-                ro.observe(wrapper);
-            }
-            applyScale();
-        });
+    <div class="acts">
+      <button class="b2" id="copyBtn">복사</button>
+      <button class="save" id="saveBtn"><span>이미지 저장</span><span class="lbl" id="saveDim">PNG · 1080×1080</span></button>
+    </div>
+  </section>
 
-        // 폰트 설정
-        window.setFont = function(fontValue, btn) {
-            window.state.fontFamily = fontValue;
-            const group = document.getElementById('fontToggleGroup');
-            group.querySelectorAll('.btn-font').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            updateStyle();
-        };
+  <section class="stage">
+    <div class="stage-h">
+      <div><span class="lbl">Harmony Division — Log Archive</span><h2>Log Preview</h2></div>
+      <span class="lbl" id="stTheme">Neutral · White</span>
+    </div>
+    <div class="frame"><canvas id="cv"></canvas></div>
+    <div class="meta"><span class="lbl hide-s" id="metaDim">1080 × 1080 · 1:1</span><span class="lbl" id="metaFont">Noto Sans</span></div>
+  </section>
+</main>
 
-        // 수치 조절
-        window.adjust = function(key, val) {
-            window.state[key] = parseFloat((window.state[key] + val).toFixed(1));
-            if(key !== 'letterSpacing' && window.state[key] < 0) window.state[key] = 0; 
-            const displayEl = document.getElementById(`val-${key}`);
-            if(displayEl){
-                let unit = key === 'lineHeight' ? 'x' : 'px';
-                displayEl.innerHTML = window.state[key] + `<span class="unit">${unit}</span>`;
-            }
-            updateStyle();
-        };
+<footer><span class="lbl">ARCH Strategic Command</span><span class="lbl">Log Archive · Internal Use</span></footer>
+<div id="toast"><img src="「ARCH」 Symbol Logo White Ver.png" alt=""><span id="tt"></span></div>
 
-        // 따옴표 스마트 변환
-        window.toggleQuotes = function() {
-            const textarea = document.getElementById('mainInput');
-            let text = textarea.value;
-            const hasStraight = /['"]/.test(text);
-            const hasCurved = /[“”‘’]/.test(text);
+<script>
+const $=id=>document.getElementById(id);
+const LOGO_B='「ARCH」 Symbol Logo Black Ver.png',LOGO_W='「ARCH」 Symbol Logo White Ver.png';
+const THEMES=[
+  {k:'NA',n:'무속성',e:'White',img:'「ARCH」 Quote Neutral A.png',bg:'#ffffff',dot:'#ffffff',ink:'#1a1a1a',logo:'B'},
+  {k:'NB',n:'무속성',e:'Black',img:'「ARCH」 Quote Neutral B.png',bg:'#0d0d0d',dot:'#111111',ink:'#ffffff',logo:'W'},
+  {k:'PY',n:'불',e:'Pyre',img:'「ARCH」 Quote Pyre.png',bg:'#fbefea',dot:'#ff5a2c',ink:'#1a1a1a',logo:'B'},
+  {k:'AQ',n:'물',e:'Aqua',img:'「ARCH」 Quote Aqua.png',bg:'#eaf3fc',dot:'#3aa0ff',ink:'#1a1a1a',logo:'B'},
+  {k:'VE',n:'풀',e:'Verde',img:'「ARCH」 Quote Verde.png',bg:'#ebf7ee',dot:'#33c060',ink:'#1a1a1a',logo:'B'},
+  {k:'FU',n:'번개',e:'Fulmen',img:'「ARCH」 Quote Fulmen.png',bg:'#fbf8e6',dot:'#e8cf2a',ink:'#1a1a1a',logo:'B'},
+  {k:'GL',n:'얼음',e:'Glacies',img:'「ARCH」 Quote Glacies.png',bg:'#eef8fc',dot:'#8fd7f5',ink:'#1a1a1a',logo:'B'},
+  {k:'AE',n:'바람',e:'Aero',img:'「ARCH」 Quote Aero.png',bg:'#ebf9f6',dot:'#4fd8bf',ink:'#1a1a1a',logo:'B'}
+];
+const FONTS=[
+  {n:'Noto Serif',f:"'Noto Serif KR',serif"},{n:'KoPub 바탕',f:"'KoPub Batang','KoPubBatang',serif"},{n:'나눔명조',f:"'Nanum Myeongjo',serif"},
+  {n:'Pretendard',f:"'Pretendard',sans-serif"},{n:'Noto Sans',f:"'Noto Sans KR',sans-serif"},{n:'나눔고딕',f:"'Nanum Gothic',sans-serif"},
+  {n:'Orbitron · Sci-Fi',f:"'Orbitron','Noto Sans KR',sans-serif",wide:1}
+];
+const SIZES={sq:{w:700,h:700,ex:'1080 × 1080',r:'1:1'}};
+const DEF={fs:24,lh:1.5,ls:0,pad:100};
+const S={fmt:'sq',theme:'NA',font:4,align:'center',v:'middle',wrap:'word',...DEF};
+const LIM={fs:[12,64],lh:[1,2.6],ls:[-3,8],pad:[40,160]};
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
 
-            if (hasStraight && !hasCurved) {
-                text = text.replace(/'([\s\S]*?)'/g, "‘$1’").replace(/"([\s\S]*?)"/g, "“$1”");
-            } else if (hasCurved) {
-                text = text.replace(/‘([\s\S]*?)’/g, "'$1'").replace(/“([\s\S]*?)”/g, '"$1"');
-            } else {
-                if(text.trim() !== "") text = `“${text.trim()}”`;
-            }
-            textarea.value = text;
-            updateText();
-        };
+/* ---------- images ---------- */
+const IMG={};
+function loadImg(src){if(IMG[src])return IMG[src];const o={ok:false,el:new Image()};o.el.onload=()=>{o.ok=true;draw();};o.el.onerror=()=>{o.ok=false;};o.el.src=src;IMG[src]=o;return o;}
+[LOGO_B,LOGO_W].forEach(loadImg);
+const theme=()=>THEMES.find(t=>t.k===S.theme);
 
-        window.setAlign = function(value, btn) {
-            window.state.textAlign = value;
-            const group = document.getElementById('alignToggleGroup');
-            group.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            updateStyle();
-        };
+/* ---------- text layout ---------- */
+function setLS(c,v){if('letterSpacing' in c)c.letterSpacing=v+'px';}
+function wrapLines(c,text,max){
+  const out=[];
+  text.split('\n').forEach(p=>{
+    if(!p.length){out.push('');return;}
+    if(S.wrap==='char'){let l='';for(const ch of p){if(l&&c.measureText(l+ch).width>max){out.push(l);l=ch.trimStart();}else l+=ch;}out.push(l);return;}
+    let l='';
+    p.split(/(\s+)/).forEach(w=>{
+      if(!w)return;
+      const t=l+w;
+      if(c.measureText(t.trimEnd()).width<=max){l=t;return;}
+      if(/^\s+$/.test(w)){out.push(l.trimEnd());l='';return;}
+      if(l.trim())out.push(l.trimEnd());
+      if(c.measureText(w).width<=max){l=w;return;}
+      l='';for(const ch of w){if(l&&c.measureText(l+ch).width>max){out.push(l);l=ch;}else l+=ch;}
+    });
+    out.push(l.trimEnd());
+  });
+  return out;
+}
+function layout(c){
+  const D=SIZES[S.fmt],F=FONTS[S.font].f,pad=S.pad,padY=Math.round(S.pad*1.0);
+  c.font=`400 ${S.size_px}px ${F}`;setLS(c,S.ls);
+  const max=D.w-pad*2,lines=wrapLines(c,$('txt').value.replace(/\s+$/,''),max);
+  const lh=S.size_px*S.lh,subH=($('creator').value.trim()||$('chara').value.trim())?18*1.4+30:0;
+  const total=lines.length*lh+subH;
+  return{D,F,pad,padY,max,lines,lh,subH,total,avail:D.h-padY*2};
+}
 
-        window.setWrap = function(value, btn) {
-            window.state.wordBreak = value;
-            const group = document.getElementById('wrapToggleGroup');
-            group.querySelectorAll('.btn-toggle').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            updateStyle();
-        };
+/* ---------- render ---------- */
+function render(c,k){
+  const T=theme();S.size_px=S.fs;
+  const L=layout(c),{D,F}=L;
+  c.setTransform(k,0,0,k,0,0);c.clearRect(0,0,D.w,D.h);
+  /* background */
+  c.fillStyle=T.bg;c.fillRect(0,0,D.w,D.h);
+  const bi=loadImg(T.img);
+  if(bi.ok){const im=bi.el,s=Math.max(D.w/im.width,D.h/im.height),w=im.width*s,h=im.height*s;c.drawImage(im,(D.w-w)/2,(D.h-h)/2,w,h);}
+  /* text block */
+  c.save();c.beginPath();c.rect(0,L.padY-4,D.w,L.avail+8);c.clip();
+  const x=S.align==='left'?L.pad:S.align==='right'?D.w-L.pad:D.w/2;
+  c.textAlign=S.align==='center'?'center':S.align;c.textBaseline='middle';c.fillStyle=T.ink;
+  let y0=S.v==='top'?L.padY:S.v==='bottom'?L.padY+L.avail-L.total:L.padY+(L.avail-L.total)/2;
+  if(L.total>L.avail)y0=L.padY;
+  c.font=`400 ${S.fs}px ${F}`;setLS(c,S.ls);
+  /* letterSpacing adds trailing space; nudge so centred/right text stays optically aligned */
+  const nud=S.align==='center'?S.ls/2:S.align==='right'?S.ls:0;
+  L.lines.forEach((ln,i)=>{c.fillText(ln,x+nud,y0+L.lh*i+L.lh/2);});
+  /* credit line */
+  const cr=$('creator').value.trim(),ch=$('chara').value.trim();
+  if(L.subH){
+    const sy=y0+L.lines.length*L.lh+30+18*.7;c.globalAlpha=.9;setLS(c,S.ls);
+    const parts=[];if(cr)parts.push([cr,300]);if(cr&&ch)parts.push(['  |  ',300]);if(ch)parts.push([ch,700]);
+    const wOf=p=>{c.font=`${p[1]} 18px ${F}`;return c.measureText(p[0]).width;};
+    const tw=parts.reduce((a,p)=>a+wOf(p),0);
+    let sx=S.align==='left'?L.pad:S.align==='right'?D.w-L.pad-tw:(D.w-tw)/2;c.textAlign='left';
+    parts.forEach(p=>{c.font=`${p[1]} 18px ${F}`;c.fillText(p[0],sx,sy);sx+=c.measureText(p[0]).width;});
+    c.globalAlpha=1;
+  }
+  c.restore();setLS(c,0);
+  /* logo */
+  const lg=loadImg(T.logo==='W'?LOGO_W:LOGO_B);
+  if(lg.ok){const lw=80,lh2=lw*lg.el.height/lg.el.width;c.globalAlpha=.8;c.drawImage(lg.el,D.w-40-lw,D.h-40-lh2,lw,lh2);c.globalAlpha=1;}
+  return L;
+}
+const cv=$('cv'),ctx=cv.getContext('2d');let raf=0;
+function draw(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{
+  const D=SIZES[S.fmt],k=Math.min(3,Math.max(1.5,(devicePixelRatio||1)*Math.max(1,cv.clientWidth/D.w)));
+  const W=Math.round(D.w*k),H=Math.round(D.h*k);if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H;}
+  const L=render(ctx,k);
+  $('warn').classList.toggle('on',L.total>L.avail+1);
+  const t=$('txt').value;$('cnt').textContent=`${t.replace(/\s/g,'').length}자 · ${t?t.split('\n').length:0}줄`;
+  persist();
+});}
 
-        function updateStyle() {
-            const main = document.getElementById('display-main');
-            const sub = document.getElementById('display-sub');
-            const area = document.getElementById('capture-area');
-            const textContainer = document.getElementById('text-container');
-            
-            main.style.fontFamily = window.state.fontFamily;
-            sub.style.fontFamily = window.state.fontFamily;
-            main.style.fontSize = window.state.fontSize + 'px';
-            main.style.lineHeight = window.state.lineHeight;
-            main.style.letterSpacing = window.state.letterSpacing + 'px';
-            main.style.textAlign = window.state.textAlign;
-            main.style.wordBreak = window.state.wordBreak;
+/* ---------- UI build ---------- */
+$('themes').innerHTML=THEMES.map(t=>`<button data-k="${t.k}" title="${t.n} (${t.e})"><i style="background:${t.dot}"></i>${t.n}${t.k==='NA'?' W':t.k==='NB'?' B':''}</button>`).join('');
+$('fonts').innerHTML=FONTS.map((f,i)=>`<button data-i="${i}" class="${f.wide?'wide':''}" style="font-family:${f.f.replace(/"/g,'&quot;')}">${f.n}</button>`).join('');
+function paintUI(){
+  document.querySelectorAll('#themes button').forEach(b=>b.classList.toggle('on',b.dataset.k===S.theme));
+  document.querySelectorAll('#fonts button').forEach(b=>b.classList.toggle('on',+b.dataset.i===S.font));
+  [['segAlign','align'],['segV','v'],['segWrap','wrap']].forEach(([id,k])=>{
+    const g=$(id),bs=[...g.querySelectorAll('button')],i=bs.findIndex(b=>b.dataset.v===S[k]);
+    bs.forEach((b,j)=>b.classList.toggle('on',j===i));const n=bs.length,kn=g.querySelector('i');
+    kn.style.width=`calc(${100/n}% - ${6/n}px)`;kn.style.transform=`translateX(${i*100}%)`;});
+  $('o-size').textContent=S.fs+'px';$('o-lh').textContent=S.lh.toFixed(2)+'x';$('o-ls').textContent=S.ls.toFixed(1)+'px';$('o-pad').textContent=S.pad+'px';
+  const T=theme(),D=SIZES[S.fmt];
+  $('stTheme').textContent=`${T.n} · ${T.e}`;$('metaDim').textContent=`${D.ex} · ${D.r}`;$('saveDim').textContent=`PNG · ${D.ex.replace(/ /g,'')}`;$('metaFont').textContent=FONTS[S.font].n;
+  draw();
+}
+document.querySelectorAll('#themes button').forEach(b=>b.addEventListener('click',()=>{S.theme=b.dataset.k;paintUI();ensureFont();}));
+document.querySelectorAll('#fonts button').forEach(b=>b.addEventListener('click',()=>{S.font=+b.dataset.i;paintUI();ensureFont();}));
+[['segAlign','align'],['segV','v'],['segWrap','wrap']].forEach(([id,k])=>$(id).querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{S[k]=b.dataset.v;paintUI();})));
+/* steppers with press-and-hold */
+function step(k,d){const[a,b]=LIM[k];S[k]=+Math.min(b,Math.max(a,S[k]+d)).toFixed(2);paintUI();}
+document.querySelectorAll('.st button').forEach(b=>{
+  let t1=0,t2=0;const stop=()=>{clearTimeout(t1);clearInterval(t2);};
+  b.addEventListener('click',()=>step(b.dataset.k,+b.dataset.d));
+  b.addEventListener('pointerdown',()=>{stop();t1=setTimeout(()=>{t2=setInterval(()=>step(b.dataset.k,+b.dataset.d),70);},420);});
+  ['pointerup','pointerleave','pointercancel'].forEach(e=>b.addEventListener(e,stop));
+});
+$('resetTune').addEventListener('click',()=>{Object.assign(S,DEF);paintUI();toast('LAYOUT RESET');});
+$('fitBtn').addEventListener('click',()=>{
+  const tc=document.createElement('canvas').getContext('2d');let lo=12,hi=64,best=12;
+  while(lo<=hi){const m=(lo+hi)>>1;S.size_px=m;const L=layout(tc);if(L.total<=L.avail){best=m;lo=m+1;}else hi=m-1;}
+  S.fs=best;paintUI();toast('FIT TO CARD · '+best+'PX');
+});
 
-            sub.style.textAlign = window.state.textAlign;
-            sub.style.letterSpacing = window.state.letterSpacing + 'px';
-            
-            area.style.padding = `${window.state.paddingTopBottom}px ${window.state.paddingLeftRight}px`;
-            
-            if(window.state.textAlign === 'left') textContainer.style.alignItems = 'flex-start';
-            else if(window.state.textAlign === 'right') textContainer.style.alignItems = 'flex-end';
-            else textContainer.style.alignItems = 'center';
-        }
+/* text tools */
+let undo=null;
+['txt','creator','chara'].forEach(i=>$(i).addEventListener('input',draw));
+$('qBtn').addEventListener('click',()=>{const ta=$('txt');undo=ta.value;let t=ta.value;
+  const st=/['"]/.test(t),cu=/[“”‘’]/.test(t);
+  if(st&&!cu)t=t.replace(/'([\s\S]*?)'/g,'‘$1’').replace(/"([\s\S]*?)"/g,'“$1”');
+  else if(cu)t=t.replace(/[‘’]/g,"'").replace(/[“”]/g,'"');
+  else if(t.trim())t=`“${t.trim()}”`;
+  ta.value=t;draw();toast('QUOTES CONVERTED');});
+$('tidyBtn').addEventListener('click',()=>{const ta=$('txt');undo=ta.value;
+  ta.value=ta.value.replace(/ /g,' ').replace(/\.{3,}/g,'…').replace(/…{2,}/g,'…').replace(/-{2,}/g,'—').replace(/[ \t]{2,}/g,' ').replace(/[ \t]+([,.!?…])/g,'$1').replace(/[ \t]+$/gm,'').replace(/\n{3,}/g,'\n\n').trim();
+  draw();toast('TEXT TIDIED');});
+$('undoBtn').addEventListener('click',()=>{if(undo==null){toast('NOTHING TO UNDO');return;}const c=$('txt').value;$('txt').value=undo;undo=c;draw();toast('UNDONE');});
+$('clrBtn').addEventListener('click',()=>{undo=$('txt').value;$('txt').value='';draw();$('txt').focus();});
 
-        window.updateText = function() {
-            document.getElementById('display-main').textContent = document.getElementById('mainInput').value;
-            const creator = document.getElementById('creatorInput').value;
-            const character = document.getElementById('characterInput').value;
-            document.getElementById('display-sub').innerHTML = `<span class="creator-name">${creator}</span> | <span class="character-name">${character}</span>`;
-        };
+/* ---------- export ---------- */
+function exportCanvas(){const D=SIZES[S.fmt],k=1080/D.w,c=document.createElement('canvas');c.width=1080;c.height=Math.round(D.h*k);render(c.getContext('2d'),k);return c;}
+function fname(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `ARCH_LOG_${($('chara').value.trim()||'LOG').replace(/[\\/:*?"<>|]+/g,'_')}_${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}.png`;}
+$('saveBtn').addEventListener('click',async()=>{
+  const b=$('saveBtn');b.classList.add('busy');await ensureFont();
+  try{const url=exportCanvas().toDataURL('image/png');const a=document.createElement('a');a.download=fname();a.href=url;document.body.appendChild(a);a.click();a.remove();toast('IMAGE SAVED');}
+  catch(e){console.error(e);toast(location.protocol==='file:'?'SAVE BLOCKED · OPEN VIA WEB':'SAVE FAILED');}
+  b.classList.remove('busy');
+});
+$('copyBtn').addEventListener('click',async()=>{
+  const b=$('copyBtn');b.classList.add('busy');await ensureFont();
+  try{
+    if(!window.ClipboardItem||!navigator.clipboard||!navigator.clipboard.write)throw new Error('unsupported');
+    const blob=await new Promise((res,rej)=>exportCanvas().toBlob(x=>x?res(x):rej(new Error('blob')),'image/png'));
+    await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);toast('IMAGE COPIED');
+  }catch(e){toast('COPY UNSUPPORTED · USE SAVE');}
+  b.classList.remove('busy');
+});
 
-        window.updateTheme = function() {
-            const select = document.getElementById('themeSelect');
-            const bg = select.value;
-            const color = select.options[select.selectedIndex].dataset.color;
-            const logo = document.getElementById('logoDisplay');
-            
-            document.getElementById('capture-area').style.backgroundImage = `url('${bg}')`;
-            document.getElementById('display-main').style.color = color;
-            document.getElementById('display-sub').style.color = color;
+/* ---------- fonts ---------- */
+async function ensureFont(){
+  if(!document.fonts||!document.fonts.load)return;
+  const f=FONTS[S.font].f,t=$('txt').value+$('creator').value+$('chara').value||'가';
+  try{await Promise.race([Promise.all([document.fonts.load(`400 24px ${f}`,t),document.fonts.load(`300 18px ${f}`,t),document.fonts.load(`700 18px ${f}`,t)]),new Promise(r=>setTimeout(r,2500))]);}catch(e){}
+  draw();
+}
+if(document.fonts&&document.fonts.addEventListener)document.fonts.addEventListener('loadingdone',draw);
 
-            if(bg === '「ARCH」 Quote Neutral B.png') logo.src = '「ARCH」 Symbol Logo White Ver.png';
-            else logo.src = '「ARCH」 Symbol Logo Black Ver.png';
-        };
+/* ---------- persist ---------- */
+let pT=0;function persist(){clearTimeout(pT);pT=setTimeout(()=>store.set('arch-log',{fmt:S.fmt,theme:S.theme,font:S.font,align:S.align,v:S.v,wrap:S.wrap,lh:S.lh,ls:S.ls,pad:S.pad,fs:S.fs,creator:$('creator').value,chara:$('chara').value}),300);}
+(function restore(){const v=store.get('arch-log',null);if(!v)return;
+  ['theme','align','v','wrap'].forEach(k=>{if(v[k])S[k]=v[k];});
+  if(typeof v.fs==='number')S.fs=v.fs;
+  if(Number.isInteger(v.font)&&FONTS[v.font])S.font=v.font;
+  if(typeof v.lh==='number')S.lh=v.lh;if(typeof v.ls==='number')S.ls=v.ls;if(typeof v.pad==='number')S.pad=v.pad;
+  if(typeof v.creator==='string')$('creator').value=v.creator;if(typeof v.chara==='string')$('chara').value=v.chara;
+})();
 
-        // 캡쳐 충돌 방지 최적화 (onclone 사용)
-        window.saveImage = function() {
-            const btn = document.getElementById('saveBtn');
-            const originalText = btn.textContent;
-            btn.textContent = "생성 중..."; btn.disabled = true;
-
-            const area = document.getElementById('capture-area');
-            
-            html2canvas(area, { 
-                scale: 2, 
-                useCORS: true, 
-                backgroundColor: null,
-                onclone: function(clonedDoc) {
-                    // 복제된 돔에서 스케일을 원본(1)으로 초기화하여 화질/레이아웃 보존
-                    clonedDoc.getElementById('capture-area').style.transform = 'scale(1)';
-                }
-            }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `ARCH_LOG_${Date.now()}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-                btn.textContent = originalText; btn.disabled = false;
-            }).catch(err => {
-                alert("저장 실패");
-                btn.textContent = originalText; btn.disabled = false;
-            });
-        };
-
-        // 이미지 복사 충돌 방지 최적화
-        window.copyImage = function() {
-            const btn = document.getElementById('copyBtn');
-            const originalText = btn.textContent;
-            btn.textContent = "복사 중..."; btn.disabled = true;
-
-            const area = document.getElementById('capture-area');
-            
-            html2canvas(area, { 
-                scale: 2, 
-                useCORS: true, 
-                backgroundColor: null,
-                onclone: function(clonedDoc) {
-                    clonedDoc.getElementById('capture-area').style.transform = 'scale(1)';
-                }
-            }).then(canvas => {
-                canvas.toBlob(blob => {
-                    if(!blob) {
-                        alert("복사 오류가 발생했습니다.");
-                        btn.textContent = originalText; btn.disabled = false;
-                        return;
-                    }
-                    try {
-                        const item = new ClipboardItem({ 'image/png': blob });
-                        navigator.clipboard.write([item]).then(() => {
-                            btn.textContent = "복사 완료!";
-                            setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 2000);
-                        }).catch(err => {
-                            alert("이 환경에서는 복사를 지원하지 않습니다. 파일 저장을 이용해주세요.");
-                            btn.textContent = originalText; btn.disabled = false;
-                        });
-                    } catch(e) {
-                        alert("클립보드 API 미지원 환경입니다.");
-                        btn.textContent = originalText; btn.disabled = false;
-                    }
-                }, 'image/png');
-            }).catch(err => {
-                alert("복사 실패");
-                btn.textContent = originalText; btn.disabled = false;
-            });
-        };
-
-        // 초기 실행
-        updateStyle(); updateTheme(); updateText();
-    </script>
+/* ---------- misc ---------- */
+let tT;function toast(m){$('tt').textContent=m;$('toast').classList.add('on');clearTimeout(tT);tT=setTimeout(()=>$('toast').classList.remove('on'),1800);}
+const pad=n=>String(n).padStart(2,'0');
+function tick(){const d=new Date();$('clock').textContent=`${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;}
+setInterval(tick,1000);tick();
+window.addEventListener('resize',draw);
+paintUI();
+(document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]):Promise.resolve()).then(()=>{ensureFont();setTimeout(()=>{$('boot').classList.add('off');setTimeout(()=>$('boot').remove(),700);},450);});
+</script>
 </body>
 </html>
