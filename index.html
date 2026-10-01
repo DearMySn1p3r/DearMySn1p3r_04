@@ -61,8 +61,10 @@ main{flex:1;display:grid;grid-template-columns:400px minmax(0,1fr);gap:28px;padd
 .kl{display:block;font-size:12px;color:var(--t2);margin-bottom:8px}
 
 /* theme chips */
-.themes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.themes button{display:flex;align-items:center;gap:7px;height:36px;padding:0 10px;border:1px solid var(--hl2);border-radius:9px;font-size:12px;color:var(--t2);transition:all .2s}
+.themes{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
+.themes button{display:flex;align-items:center;gap:8px;height:34px;padding:0 11px;border:1px solid var(--hl2);border-radius:9px;font-size:12px;color:var(--t2);transition:all .2s;white-space:nowrap;min-width:0}
+.themes button em{font:500 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--t3);font-style:normal;margin-left:2px}
+.themes button.on em{color:var(--ink)}
 .themes button i{width:10px;height:10px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
 .themes button:hover{border-color:#999;color:var(--ink)}
 .themes button.on{border-color:var(--ink);color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
@@ -109,11 +111,11 @@ textarea{width:100%;padding:12px 13px;border:1px solid var(--hl2);border-radius:
 .busy{pointer-events:none;opacity:.6}
 
 /* preview */
-.stage{position:sticky;top:86px;animation:rise .9s var(--ease) .08s both;min-width:0}
+.stage{position:sticky;top:86px;width:100%;max-width:600px;justify-self:center;animation:rise .9s var(--ease) .08s both;min-width:0}
 .stage-h{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;gap:12px}
 .stage-h h2{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:8px}
 .frame{position:relative;padding:22px;border:1px solid var(--hl);border-radius:20px;background:#fff;display:flex;justify-content:center}
-#cv{display:block;width:100%;height:auto;box-shadow:0 20px 50px rgba(0,0,0,.12);border-radius:4px;background:#fff}
+#cv{display:block;width:100%;max-width:520px;height:auto;box-shadow:0 20px 50px rgba(0,0,0,.12);border-radius:4px;background:#fff}
 .meta{display:flex;justify-content:space-between;margin-top:14px;padding:0 2px;gap:12px}
 
 /* toast */
@@ -134,7 +136,8 @@ footer{padding:18px 28px 26px;display:flex;justify-content:space-between;max-wid
 @keyframes ld{from{transform:translateX(-100%)}}
 
 @media (max-width:980px){
-  main{grid-template-columns:1fr;padding:16px;gap:16px}
+  main{grid-template-columns:minmax(0,1fr);padding:16px;gap:16px}
+  .panel,.stage{min-width:0}
   .panel{order:2;padding:22px 18px 20px}
   .stage{order:1;position:sticky;top:calc(54px + env(safe-area-inset-top));z-index:5;background:var(--bg);margin:-16px -16px 0;padding:12px 16px 10px;border-bottom:1px solid var(--hl)}
   .stage-h{display:none}
@@ -142,12 +145,12 @@ footer{padding:18px 28px 26px;display:flex;justify-content:space-between;max-wid
   header{padding:0 16px;padding-top:env(safe-area-inset-top);height:calc(54px + env(safe-area-inset-top))}
   .hd-r .dot,.brand .sep,.brand .ttl{display:none}
   .frame{padding:10px;border-radius:16px}
-  #cv{max-height:42vh;width:auto;max-width:100%}
+  #cv{max-height:36vh;width:auto;max-width:100%}
   .inp,textarea{font-size:16px}
   footer{padding:6px 16px calc(22px + env(safe-area-inset-bottom))}
   #toast{bottom:auto;top:calc(64px + env(safe-area-inset-top))}
 }
-@media (max-width:420px){.themes{grid-template-columns:repeat(2,1fr)}.meta .hide-s{display:none}.save .lbl{display:none}.save{justify-content:center}footer .lbl:last-child{display:none}.st{padding-left:10px}.st button{width:26px}.st output{min-width:40px}}
+@media (max-width:420px){.meta .hide-s{display:none}.save .lbl{display:none}.save{justify-content:center}footer .lbl:last-child{display:none}.st{padding-left:10px}.st button{width:26px}.st output{min-width:40px}}
 .st span{white-space:nowrap}
 footer .lbl{white-space:nowrap}
 </style>
@@ -205,7 +208,7 @@ footer .lbl{white-space:nowrap}
   <section class="stage">
     <div class="stage-h">
       <div><span class="lbl">Harmony Division — Log Archive</span><h2>Log Preview</h2></div>
-      <span class="lbl" id="stTheme">Neutral · White</span>
+      <span class="kl" id="stTheme" style="margin:0">Neutral · White</span>
     </div>
     <div class="frame"><canvas id="cv"></canvas></div>
     <div class="meta"><span class="lbl hide-s" id="metaDim">1080 × 1080 · 1:1</span><span class="lbl" id="metaFont">Noto Sans</span></div>
@@ -322,7 +325,7 @@ function draw(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{
 });}
 
 /* ---------- UI build ---------- */
-$('themes').innerHTML=THEMES.map(t=>`<button data-k="${t.k}" title="${t.n} (${t.e})"><i style="background:${t.dot}"></i>${t.n}${t.k==='NA'?' W':t.k==='NB'?' B':''}</button>`).join('');
+$('themes').innerHTML=THEMES.map(t=>`<button data-k="${t.k}" title="${t.n} (${t.e})"><i style="background:${t.dot}"></i>${t.n}<em>${t.e}</em></button>`).join('');
 $('fonts').innerHTML=FONTS.map((f,i)=>`<button data-i="${i}" class="${f.wide?'wide':''}" style="font-family:${f.f.replace(/"/g,'&quot;')}">${f.n}</button>`).join('');
 function paintUI(){
   document.querySelectorAll('#themes button').forEach(b=>b.classList.toggle('on',b.dataset.k===S.theme));
@@ -333,7 +336,7 @@ function paintUI(){
     kn.style.width=`calc(${100/n}% - ${6/n}px)`;kn.style.transform=`translateX(${i*100}%)`;});
   $('o-size').textContent=S.fs+'px';$('o-lh').textContent=S.lh.toFixed(2)+'x';$('o-ls').textContent=S.ls.toFixed(1)+'px';$('o-pad').textContent=S.pad+'px';
   const T=theme(),D=SIZES[S.fmt];
-  $('stTheme').textContent=`${T.n} · ${T.e}`;$('metaDim').textContent=`${D.ex} · ${D.r}`;$('saveDim').textContent=`PNG · ${D.ex.replace(/ /g,'')}`;$('metaFont').textContent=FONTS[S.font].n;
+  $('stTheme').textContent=`${T.n} (${T.e})`;$('metaDim').textContent=`${D.ex} · ${D.r}`;$('saveDim').textContent=`PNG · ${D.ex.replace(/ /g,'')}`;$('metaFont').textContent=FONTS[S.font].n;
   draw();
 }
 document.querySelectorAll('#themes button').forEach(b=>b.addEventListener('click',()=>{S.theme=b.dataset.k;paintUI();ensureFont();}));
