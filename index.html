@@ -98,6 +98,34 @@ textarea{width:100%;padding:12px 13px;border:1px solid var(--hl2);border-radius:
 .cnt{display:flex;justify-content:space-between;align-items:center;margin:8px 0 12px}
 .cred{display:grid;grid-template-columns:1fr 1.3fr;gap:8px}
 
+
+/* line styles */
+.lines{display:flex;flex-direction:column;gap:4px;max-height:168px;overflow-y:auto;margin-bottom:12px;padding-right:2px}
+.lines button{display:grid;grid-template-columns:22px 1fr auto;align-items:center;gap:8px;height:32px;padding:0 10px;border:1px solid var(--hl);border-radius:8px;text-align:left;font-size:12.5px;color:var(--t2);transition:all .15s}
+.lines button b{font:500 9.5px var(--mono);color:var(--t4);font-weight:500}
+.lines button span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lines button em{font-style:normal;font-size:10.5px;color:var(--t3);white-space:nowrap}
+.lines button:hover{border-color:#bbb;color:var(--ink)}
+.lines button.on{border-color:var(--ink);background:#f4f4f2;color:var(--ink)}
+.lines button.on b{color:var(--ink)}
+.empty-l{font-size:12px;color:var(--t4);padding:10px 2px}
+.sty{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.sty .g{grid-column:1/-1;font:500 9.5px var(--mono);letter-spacing:.16em;color:var(--t3);margin:8px 0 1px}
+.sty .g:first-child{margin-top:0}
+.sty button{height:46px;border:1px solid var(--hl2);border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:11px;color:var(--t2);transition:all .15s;padding:0 4px}
+.sty button i{font-style:normal;display:block;height:14px;line-height:14px;font-size:11px;color:var(--ink)}
+.sty button:hover{border-color:var(--ink)}
+.sty button.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);color:var(--ink)}
+.sty button.dis{opacity:.4;pointer-events:none}
+.accrow{display:flex;align-items:center;gap:10px;margin-top:14px}
+.accsw{display:flex;align-items:center;gap:8px;height:32px;padding:0 10px;border:1px solid var(--hl2);border-radius:8px;cursor:pointer}
+.accsw input{width:18px;height:18px;border:0;padding:0;-webkit-appearance:none;appearance:none;background:none;cursor:pointer}
+.accsw input::-webkit-color-swatch-wrapper{padding:0}.accsw input::-webkit-color-swatch{border:1px solid rgba(0,0,0,.12);border-radius:4px}
+.accsw input::-moz-color-swatch{border:1px solid rgba(0,0,0,.12);border-radius:4px}
+.accsw code{font:500 10px var(--mono);color:var(--t3)}
+.hint{font-size:11.5px;line-height:1.65;color:var(--t3);margin-top:12px;word-break:keep-all}
+.hint b{color:var(--t2);font-weight:600}
+#cv{cursor:pointer}
 /* actions */
 .acts{display:grid;grid-template-columns:1fr 2fr;gap:8px;margin-top:20px}
 .b2{height:50px;border:1px solid var(--hl2);border-radius:11px;font-size:14px;font-weight:600;transition:all .2s}
@@ -194,9 +222,17 @@ footer .lbl{white-space:nowrap}
 
     <div class="sec">
       <div class="sec-h"><span class="lbl"><b>04</b>Excerpt</span><span class="tls"><button class="tl" id="qBtn">" " ⇄ “ ”</button><button class="tl" id="tidyBtn">다듬기</button><button class="tl" id="undoBtn">되돌리기</button></span></div>
-      <textarea id="txt" rows="5" placeholder="발췌할 내용을 입력하세요">“이곳은 초인적인 힘을 가진 소수, ‘센티넬’과 ‘가이드’가 인류를 위협하는 존재들에 맞서 싸우는 최전선입니다.”</textarea>
+      <textarea id="txt" rows="5" placeholder="발췌할 내용을 입력하세요"></textarea>
       <div class="cnt"><span class="kl" id="cnt" style="margin:0;color:var(--t3)">0자 · 0줄</span><button class="tl" id="clrBtn">CLEAR ×</button></div>
       <div class="cred"><input class="inp" id="creator" placeholder="제작자명" maxlength="24" value="CherryMango"><input class="inp" id="chara" placeholder="캐릭터명 (굵게 표시)" maxlength="24" value="ARCH"></div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><span class="lbl"><b>05</b>Line Style</span><span class="tls"><button class="tl" id="selAll">전체</button><button class="tl" id="selNone">해제</button><button class="tl" id="styClr">모양 지우기</button></span></div>
+      <div class="lines" id="lines"><div class="empty-l">본문을 입력하면 줄 목록이 나타나요.</div></div>
+      <div class="sty" id="sty"></div>
+      <div class="accrow"><span class="kl" style="margin:0">강조색</span><label class="accsw"><input type="color" id="accIn" value="#1a1a1a"><code id="accV">THEME</code></label><button class="tl" id="accAuto">테마색으로</button></div>
+      <p class="hint">줄을 고른 뒤 모양을 누르세요. 미리보기의 줄을 눌러도 골라져요. 이름 | 대사와 상대 말풍선은 <b>이름: 대사</b>처럼 쓰면 이름이 붙어요.</p>
     </div>
 
     <div class="acts">
@@ -238,7 +274,7 @@ const FONTS=[
 ];
 const SIZES={sq:{w:700,h:700,ex:'1080 × 1080',r:'1:1'}};
 const DEF={fs:24,lh:1.5,ls:0,pad:100};
-const S={fmt:'sq',theme:'NA',font:4,align:'center',v:'middle',wrap:'word',...DEF};
+const S={acc:'',fmt:'sq',theme:'NA',font:4,align:'center',v:'middle',wrap:'word',...DEF};
 const LIM={fs:[12,64],lh:[1,2.6],ls:[-3,8],pad:[40,160]};
 const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch(e){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}};
 
@@ -269,39 +305,95 @@ function wrapLines(c,text,max){
   });
   return out;
 }
+/* ---------- line styles ---------- */
+const STY=[
+  {id:'',g:'글자',nm:'기본'},{id:'small',g:'글자',nm:'작은 글씨'},{id:'mute',g:'글자',nm:'흐리게'},{id:'caps',g:'글자',nm:'소제목'},
+  {id:'bar',g:'강조',nm:'세로선'},{id:'box',g:'강조',nm:'색 상자'},{id:'quote',g:'강조',nm:'인용'},{id:'rule',g:'강조',nm:'구분선'},
+  {id:'tag',g:'대화',nm:'이름 | 대사'},{id:'bubL',g:'대화',nm:'상대 말풍선'},{id:'bubR',g:'대화',nm:'내 말풍선'}
+];
+let LS=[];            /* style per paragraph index */
+let SEL=new Set();    /* selected paragraph indices */
+let LAST_L=null;
+function hexRGB(h){h=h.replace('#','');if(h.length===3)h=h.split('').map(x=>x+x).join('');const n=parseInt(h,16);return[n>>16&255,n>>8&255,n&255];}
+const rgba=(h,a)=>{const[r,g,b]=hexRGB(h);return`rgba(${r},${g},${b},${a})`;};
+const lum=h=>{const[r,g,b]=hexRGB(h).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});return .2126*r+.7152*g+.0722*b;};
+function shade(h,k){const c=hexRGB(h).map(v=>Math.round(k<0?v*(1+k):v+(255-v)*k));return '#'+c.map(v=>v.toString(16).padStart(2,'0')).join('');}
+function accent(){const T=theme();if(S.acc)return S.acc;return T.k==='NA'?'#1a1a1a':T.k==='NB'?'#ffffff':T.dot;}
+function splitName(t){const m=t.match(/^\s*([^:：]{1,14})\s*[:：]\s*([\s\S]*)$/);return m&&!/^[\d\s.]+$/.test(m[1])&&!/^https?$/i.test(m[1].trim())&&m[2].trim()?[m[1].trim(),m[2]]:['',t];}
+function rr(c,x,y,w,h,r){const R=Array.isArray(r)?r:[r,r,r,r];c.beginPath();c.moveTo(x+R[0],y);c.lineTo(x+w-R[1],y);c.arcTo(x+w,y,x+w,y+R[1],R[1]);c.lineTo(x+w,y+h-R[2]);c.arcTo(x+w,y+h,x+w-R[2],y+h,R[2]);c.lineTo(x+R[3],y+h);c.arcTo(x,y+h,x,y+h-R[3],R[3]);c.lineTo(x,y+R[0]);c.arcTo(x,y,x+R[0],y,R[0]);c.closePath();}
+
 function layout(c){
-  const D=SIZES[S.fmt],F=FONTS[S.font].f,pad=S.pad,padY=Math.round(S.pad*1.0);
-  c.font=`400 ${S.size_px}px ${F}`;setLS(c,S.ls);
-  const max=D.w-pad*2,lines=wrapLines(c,$('txt').value.replace(/\s+$/,''),max);
-  const lh=S.size_px*S.lh,subH=($('creator').value.trim()||$('chara').value.trim())?18*1.4+30:0;
-  const total=lines.length*lh+subH;
-  return{D,F,pad,padY,max,lines,lh,subH,total,avail:D.h-padY*2};
+  const D=SIZES[S.fmt],F=FONTS[S.font].f,pad=S.pad,padY=S.pad,cw=D.w-pad*2,fs=S.size_px,lh=fs*S.lh;
+  const T=theme(),dark=T.k==='NB',A=accent(),At=dark||lum(A)<.45?A:shade(A,-.38),ink=T.ink;
+  const raw=$('txt').value.replace(/\s+$/,''),paras=raw?raw.split('\n'):[];
+  const font=(w,sz)=>{c.font=`${w} ${sz}px ${F}`;};
+  const items=[];
+  paras.forEach((t,i)=>{
+    const st=LS[i]||'',prev=i>0&&t.trim()&&paras[i-1].trim()?LS[i-1]||'':null,next=i<paras.length-1&&t.trim()&&paras[i+1].trim()?LS[i+1]||'':null;
+    const ps=!!st&&prev===st,ns=!!st&&next===st,it={i,st,mt:0,mb:0,h:0,draw:null};
+    const textBlock=(maxW,sz,w,lsp)=>{font(w,sz);setLS(c,lsp);return wrapLines(c,t,maxW);};
+    const drawLines=(lines,x,y,lineH,al,sz,w,lsp,col,alpha=1)=>{font(w,sz);setLS(c,lsp);c.fillStyle=col;c.globalAlpha=alpha;c.textBaseline='middle';
+      c.textAlign=al==='center'?'center':al;const nud=al==='center'?lsp/2:al==='right'?lsp:0;
+      lines.forEach((ln,k)=>c.fillText(ln,x+nud,y+lineH*k+lineH/2));c.globalAlpha=1;};
+    const ax=al=>al==='left'?pad:al==='right'?pad+cw:pad+cw/2;
+    if(!t.trim()){it.h=lh;it.draw=()=>{};items.push(it);return;}
+    switch(st){
+      case 'bar':{const bw=Math.max(2,fs*.14),ind=bw+fs*.8,L=textBlock(cw-ind,fs,400,S.ls);it.h=L.length*lh;it.mt=ps?0:fs*.45;it.mb=ns?0:fs*.45;
+        it.draw=y=>{c.fillStyle=A;c.fillRect(pad,y+(ps?0:fs*.1),bw,it.h-(ps?0:fs*.1)-(ns?0:fs*.1));drawLines(L,pad+ind,y,lh,'left',fs,400,S.ls,ink);};break;}
+      case 'box':{const px=fs*.85,pt=ps?fs*.04:fs*.5,pb=ns?fs*.04:fs*.5,L=textBlock(cw-px*2,fs,400,S.ls);it.h=pt+L.length*lh+pb;it.mt=ps?0:fs*.5;it.mb=ns?0:fs*.5;
+        it.draw=y=>{const r=fs*.45;c.fillStyle=rgba(A,dark?.2:.13);rr(c,pad,y,cw,it.h,[ps?0:r,ps?0:r,ns?0:r,ns?0:r]);c.fill();
+          const al=S.align,x=al==='left'?pad+px:al==='right'?pad+cw-px:pad+cw/2;drawLines(L,x,y+pt,lh,al,fs,400,S.ls,ink);};break;}
+      case 'quote':{const ind=fs*1.35,L=textBlock(cw-ind,fs,400,S.ls);it.h=L.length*lh;it.mt=ps?0:fs*.55;it.mb=ns?0:fs*.55;
+        it.draw=y=>{if(!ps){c.font=`400 ${fs*2.3}px Georgia,'Times New Roman',serif`;setLS(c,0);c.fillStyle=A;c.textAlign='left';c.textBaseline='top';c.fillText('“',pad-fs*.02,y-fs*.12);}
+          drawLines(L,pad+ind,y,lh,'left',fs,400,S.ls,ink);};break;}
+      case 'rule':{const sz=fs*.8,L=textBlock(cw*.7,sz,400,S.ls+.5);it.h=L.length*sz*S.lh;it.mt=ps?fs*.2:fs*.9;it.mb=ns?fs*.2:fs*.9;
+        it.draw=y=>{font(400,sz);setLS(c,S.ls+.5);const tw=Math.max(...L.map(x=>c.measureText(x).width)),cx=pad+cw/2,my=y+it.h/2,g=fs*.9;
+          c.fillStyle=ink;c.globalAlpha=.35;c.fillRect(pad,my-.5,Math.max(0,cw/2-tw/2-g),1);c.fillRect(cx+tw/2+g,my-.5,Math.max(0,cw/2-tw/2-g),1);c.globalAlpha=1;
+          drawLines(L,cx,y,sz*S.lh,'center',sz,400,S.ls+.5,ink,.82);};break;}
+      case 'tag':{const[nm,msg]=splitName(t),nsz=fs*.9;font(500,nsz);setLS(c,0);const nw=nm?c.measureText(nm).width:0,ind=nm?nw+fs*1.9:0;
+        font(400,fs);setLS(c,S.ls);const L=wrapLines(c,msg,cw-ind);it.h=L.length*lh;it.mt=ps?fs*.3:fs*.55;it.mb=ns?fs*.3:fs*.55;
+        it.draw=y=>{if(nm){font(500,nsz);setLS(c,0);c.fillStyle=At;c.textAlign='left';c.textBaseline='middle';c.fillText(nm,pad,y+lh/2);
+            c.fillStyle=ink;c.globalAlpha=.28;c.fillRect(pad+nw+fs*.95,y+(lh-fs*1.05)/2,Math.max(1,fs*.06),fs*1.05);c.globalAlpha=1;}
+          drawLines(L,pad+ind,y,lh,'left',fs,400,S.ls,ink);};break;}
+      case 'bubL':case 'bubR':{const me=st==='bubR',[nm,msg]=me?['',t]:splitName(t),px=fs*.8,py=fs*.45,blh=fs*Math.min(S.lh,1.5),maxB=cw*.74;
+        font(400,fs);setLS(c,S.ls);const L=wrapLines(c,msg,maxB-px*2),tw=Math.max(...L.map(x=>c.measureText(x).width)),bw=Math.min(maxB,tw+px*2);
+        const nh=nm&&!(ps&&splitName(paras[i-1])[0]===nm)?fs*.72*1.5:0;
+        it.h=nh+L.length*blh+py*2;it.mt=ps?fs*.32:fs*.6;it.mb=ns?fs*.32:fs*.6;
+        const fill=me?A:(dark?'rgba(255,255,255,.12)':'rgba(0,0,0,.06)'),tc=me?(lum(A)>.5?'#1a1a1a':'#ffffff'):ink;
+        it.draw=y=>{const x=me?pad+cw-bw:pad;if(nh){font(500,fs*.72);setLS(c,0);c.fillStyle=At;c.textAlign='left';c.textBaseline='middle';c.globalAlpha=.9;c.fillText(nm,x+2,y+nh*.42);c.globalAlpha=1;}
+          const r=Math.min(fs*.6,(it.h-nh)/2),sr=fs*.15;c.fillStyle=fill;rr(c,x,y+nh,bw,it.h-nh,me?[r,sr,r,r]:[sr,r,r,r]);c.fill();
+          drawLines(L,x+px,y+nh+py,blh,'left',fs,400,S.ls,tc);};break;}
+      case 'caps':{const sz=fs*.62,lsp=sz*.25,L=textBlock(cw,sz,700,lsp);it.h=L.length*sz*1.6;it.mt=fs*.6;it.mb=fs*.15;
+        it.draw=y=>drawLines(L,ax(S.align),y,sz*1.6,S.align,sz,700,lsp,At);break;}
+      case 'small':case 'mute':default:{const sz=st==='small'?fs*.78:fs,L=textBlock(cw,sz,400,S.ls),lineH=sz*S.lh;it.h=L.length*lineH;
+        const a=st==='small'?.65:st==='mute'?.42:1;it.draw=y=>drawLines(L,ax(S.align),y,lineH,S.align,sz,400,S.ls,ink,a);}
+    }
+    items.push(it);
+  });
+  /* stack with collapsed margins */
+  let y=0;items.forEach((it,k)=>{const gap=k?Math.max(items[k-1].mb,it.mt):0;y+=gap;it.y=y;y+=it.h;});
+  const body=y,cr=$('creator').value.trim(),ch=$('chara').value.trim(),subH=(cr||ch)?18*1.4+(items.length?30:0):0;
+  return{D,F,pad,padY,cw,items,body,subH,total:body+subH,avail:D.h-padY*2,cr,ch};
 }
 
 /* ---------- render ---------- */
-function render(c,k){
+function render(c,k,preview,noImg){
   const T=theme();S.size_px=S.fs;
+  c.setTransform(k,0,0,k,0,0);
   const L=layout(c),{D,F}=L;
-  c.setTransform(k,0,0,k,0,0);c.clearRect(0,0,D.w,D.h);
-  /* background */
+  c.clearRect(0,0,D.w,D.h);
   c.fillStyle=T.bg;c.fillRect(0,0,D.w,D.h);
-  const bi=loadImg(T.img);
+  const bi=noImg?{ok:false}:loadImg(T.img);
   if(bi.ok){const im=bi.el,s=Math.max(D.w/im.width,D.h/im.height),w=im.width*s,h=im.height*s;c.drawImage(im,(D.w-w)/2,(D.h-h)/2,w,h);}
-  /* text block */
   c.save();c.beginPath();c.rect(0,L.padY-4,D.w,L.avail+8);c.clip();
-  const x=S.align==='left'?L.pad:S.align==='right'?D.w-L.pad:D.w/2;
-  c.textAlign=S.align==='center'?'center':S.align;c.textBaseline='middle';c.fillStyle=T.ink;
   let y0=S.v==='top'?L.padY:S.v==='bottom'?L.padY+L.avail-L.total:L.padY+(L.avail-L.total)/2;
   if(L.total>L.avail)y0=L.padY;
-  c.font=`400 ${S.fs}px ${F}`;setLS(c,S.ls);
-  /* letterSpacing adds trailing space; nudge so centred/right text stays optically aligned */
-  const nud=S.align==='center'?S.ls/2:S.align==='right'?S.ls:0;
-  L.lines.forEach((ln,i)=>{c.fillText(ln,x+nud,y0+L.lh*i+L.lh/2);});
-  /* credit line */
-  const cr=$('creator').value.trim(),ch=$('chara').value.trim();
+  L.y0=y0;
+  if(preview&&SEL.size){c.fillStyle='rgba(120,140,255,.14)';L.items.forEach(it=>{if(SEL.has(it.i))c.fillRect(L.pad-10,y0+it.y-3,L.cw+20,it.h+6);});}
+  L.items.forEach(it=>it.draw(y0+it.y));
   if(L.subH){
-    const sy=y0+L.lines.length*L.lh+30+18*.7;c.globalAlpha=.9;setLS(c,S.ls);
-    const parts=[];if(cr)parts.push([cr,300]);if(cr&&ch)parts.push(['  |  ',300]);if(ch)parts.push([ch,700]);
+    const sy=y0+L.body+(L.items.length?30:0)+18*.7;c.globalAlpha=.9;setLS(c,S.ls);c.fillStyle=T.ink;c.textBaseline='middle';
+    const parts=[];if(L.cr)parts.push([L.cr,300]);if(L.cr&&L.ch)parts.push(['  |  ',300]);if(L.ch)parts.push([L.ch,700]);
     const wOf=p=>{c.font=`${p[1]} 18px ${F}`;return c.measureText(p[0]).width;};
     const tw=parts.reduce((a,p)=>a+wOf(p),0);
     let sx=S.align==='left'?L.pad:S.align==='right'?D.w-L.pad-tw:(D.w-tw)/2;c.textAlign='left';
@@ -309,8 +401,7 @@ function render(c,k){
     c.globalAlpha=1;
   }
   c.restore();setLS(c,0);
-  /* logo */
-  const lg=loadImg(T.logo==='W'?LOGO_W:LOGO_B);
+  const lg=noImg?{ok:false}:loadImg(T.logo==='W'?LOGO_W:LOGO_B);
   if(lg.ok){const lw=80,lh2=lw*lg.el.height/lg.el.width;c.globalAlpha=.8;c.drawImage(lg.el,D.w-40-lw,D.h-40-lh2,lw,lh2);c.globalAlpha=1;}
   return L;
 }
@@ -318,7 +409,7 @@ const cv=$('cv'),ctx=cv.getContext('2d');let raf=0;
 function draw(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{
   const D=SIZES[S.fmt],k=Math.min(3,Math.max(1.5,(devicePixelRatio||1)*Math.max(1,cv.clientWidth/D.w)));
   const W=Math.round(D.w*k),H=Math.round(D.h*k);if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H;}
-  const L=render(ctx,k);
+  const L=render(ctx,k,true);LAST_L=L;
   $('warn').classList.toggle('on',L.total>L.avail+1);
   const t=$('txt').value;$('cnt').textContent=`${t.replace(/\s/g,'').length}자 · ${t?t.split('\n').length:0}줄`;
   persist();
@@ -339,7 +430,7 @@ function paintUI(){
   $('stTheme').textContent=`${T.n} (${T.e})`;$('metaDim').textContent=`${D.ex} · ${D.r}`;$('saveDim').textContent=`PNG · ${D.ex.replace(/ /g,'')}`;$('metaFont').textContent=FONTS[S.font].n;
   draw();
 }
-document.querySelectorAll('#themes button').forEach(b=>b.addEventListener('click',()=>{S.theme=b.dataset.k;paintUI();ensureFont();}));
+document.querySelectorAll('#themes button').forEach(b=>b.addEventListener('click',()=>{S.theme=b.dataset.k;paintUI();ensureFont();if(typeof paintAcc==='function')paintAcc();}));
 document.querySelectorAll('#fonts button').forEach(b=>b.addEventListener('click',()=>{S.font=+b.dataset.i;paintUI();ensureFont();}));
 [['segAlign','align'],['segV','v'],['segWrap','wrap']].forEach(([id,k])=>$(id).querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{S[k]=b.dataset.v;paintUI();})));
 /* steppers with press-and-hold */
@@ -347,6 +438,7 @@ function step(k,d){const[a,b]=LIM[k];S[k]=+Math.min(b,Math.max(a,S[k]+d)).toFixe
 document.querySelectorAll('.st button').forEach(b=>{
   let t1=0,t2=0;const stop=()=>{clearTimeout(t1);clearInterval(t2);};
   b.addEventListener('click',()=>step(b.dataset.k,+b.dataset.d));
+  b.addEventListener('contextmenu',e=>e.preventDefault());
   b.addEventListener('pointerdown',()=>{stop();t1=setTimeout(()=>{t2=setInterval(()=>step(b.dataset.k,+b.dataset.d),70);},420);});
   ['pointerup','pointerleave','pointercancel'].forEach(e=>b.addEventListener(e,stop));
 });
@@ -358,36 +450,83 @@ $('fitBtn').addEventListener('click',()=>{
 });
 
 /* text tools */
-let undo=null;
+let undo=null,undoLS=null;
 ['txt','creator','chara'].forEach(i=>$(i).addEventListener('input',draw));
 $('qBtn').addEventListener('click',()=>{const ta=$('txt');undo=ta.value;let t=ta.value;
   const st=/['"]/.test(t),cu=/[“”‘’]/.test(t);
   if(st&&!cu)t=t.replace(/'([\s\S]*?)'/g,'‘$1’').replace(/"([\s\S]*?)"/g,'“$1”');
   else if(cu)t=t.replace(/[‘’]/g,"'").replace(/[“”]/g,'"');
   else if(t.trim())t=`“${t.trim()}”`;
-  ta.value=t;draw();toast('QUOTES CONVERTED');});
+  ta.value=t;shiftStyles();draw();toast('QUOTES CONVERTED');});
 $('tidyBtn').addEventListener('click',()=>{const ta=$('txt');undo=ta.value;
   ta.value=ta.value.replace(/ /g,' ').replace(/\.{3,}/g,'…').replace(/…{2,}/g,'…').replace(/-{2,}/g,'—').replace(/[ \t]{2,}/g,' ').replace(/[ \t]+([,.!?…])/g,'$1').replace(/[ \t]+$/gm,'').replace(/\n{3,}/g,'\n\n').trim();
-  draw();toast('TEXT TIDIED');});
-$('undoBtn').addEventListener('click',()=>{if(undo==null){toast('NOTHING TO UNDO');return;}const c=$('txt').value;$('txt').value=undo;undo=c;draw();toast('UNDONE');});
-$('clrBtn').addEventListener('click',()=>{undo=$('txt').value;$('txt').value='';draw();$('txt').focus();});
+  shiftStyles();draw();toast('TEXT TIDIED');});
+$('undoBtn').addEventListener('click',()=>{if(undo==null){toast('NOTHING TO UNDO');return;}const c=$('txt').value;$('txt').value=undo;undo=c;if(undoLS){LS=undoLS;undoLS=null;PREV=paras();paintLines();}else shiftStyles();draw();toast('UNDONE');});
+$('clrBtn').addEventListener('click',()=>{undo=$('txt').value;undoLS=LS.slice();$('txt').value='';LS=[];SEL.clear();PREV=[];paintLines();draw();$('txt').focus();});
+
+
+/* ---------- line style UI ---------- */
+const SAMPLE={'':'가나다',small:'<span style="font-size:9px;opacity:.6">가나다</span>',mute:'<span style="opacity:.4">가나다</span>',caps:'<span style="font-size:8px;letter-spacing:.2em;font-weight:700">TITLE</span>',
+  bar:'<span style="border-left:2px solid currentColor;padding-left:5px">가나</span>',box:'<span style="background:rgba(0,0,0,.08);padding:1px 6px;border-radius:3px">가나</span>',
+  quote:'<span style="font:15px/1 Georgia,serif;vertical-align:-3px">“</span>가나',rule:'<span style="opacity:.5">—</span> 가 <span style="opacity:.5">—</span>',
+  tag:'유하<span style="opacity:.3"> | </span>응',bubL:'<span style="background:rgba(0,0,0,.07);padding:1px 6px;border-radius:2px 7px 7px 7px">안녕</span>',bubR:'<span style="background:#111;color:#fff;padding:1px 6px;border-radius:7px 2px 7px 7px">응!</span>'};
+(function(){let g='',h='';STY.forEach(x=>{if(x.g!==g){g=x.g;h+=`<div class="g">${g}</div>`;}h+=`<button data-s="${x.id}"><i>${SAMPLE[x.id]}</i>${x.nm}</button>`;});$('sty').innerHTML=h;})();
+const paras=()=>{const v=$('txt').value;return v?v.split('\n'):[];};
+function paintLines(){
+  const P=paras(),box=$('lines');
+  [...SEL].forEach(i=>{if(i>=P.length||!P[i].trim())SEL.delete(i);});
+  const rows=P.map((t,i)=>t.trim()?`<button data-i="${i}" class="${SEL.has(i)?'on':''}"><b>${String(i+1).padStart(2,'0')}</b><span>${esc(t)}</span><em>${LS[i]?STY.find(x=>x.id===LS[i]).nm:''}</em></button>`:'').join('');
+  box.innerHTML=rows||'<div class="empty-l">본문을 입력하면 줄 목록이 나타나요.</div>';
+  box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const i=+b.dataset.i;SEL.has(i)?SEL.delete(i):SEL.add(i);paintLines();draw();}));
+  const cur=SEL.size?[...SEL].map(i=>LS[i]||''):null,same=cur&&cur.every(v=>v===cur[0])?cur[0]:null;
+  $('sty').querySelectorAll('button').forEach(b=>{b.classList.toggle('on',same!==null&&b.dataset.s===same);b.classList.toggle('dis',!SEL.size);});
+}
+const esc=t=>t.replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+$('sty').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if(!SEL.size){toast('SELECT A LINE FIRST');return;}SEL.forEach(i=>{LS[i]=b.dataset.s;});paintLines();draw();}));
+$('selAll').addEventListener('click',()=>{paras().forEach((t,i)=>{if(t.trim())SEL.add(i);});paintLines();draw();});
+$('selNone').addEventListener('click',()=>{SEL.clear();paintLines();draw();});
+$('styClr').addEventListener('click',()=>{LS=[];paintLines();draw();toast('LINE STYLES CLEARED');});
+/* keep styles attached to the right lines while editing */
+let PREV=paras();
+function shiftStyles(){
+  const N=paras(),O=PREV;if(N.length!==O.length){
+    let a=0;while(a<O.length&&a<N.length&&O[a]===N[a])a++;
+    let b=0;while(b<O.length-a&&b<N.length-a&&O[O.length-1-b]===N[N.length-1-b])b++;
+    const nl=[],ns=new Set();
+    for(let i=0;i<a;i++){nl[i]=LS[i];if(SEL.has(i))ns.add(i);}
+    for(let k=0;k<b;k++){const oi=O.length-1-k,ni=N.length-1-k;nl[ni]=LS[oi];if(SEL.has(oi))ns.add(ni);}
+    LS=nl;SEL=ns;}
+  PREV=N;paintLines();
+}
+$('txt').addEventListener('input',shiftStyles);
+/* click a line on the preview to select it */
+$('cv').addEventListener('click',e=>{const L=LAST_L;if(!L||L.y0==null)return;const r=$('cv').getBoundingClientRect(),y=(e.clientY-r.top)*L.D.h/r.height;
+  const it=L.items.find(t=>y>=L.y0+t.y-4&&y<=L.y0+t.y+t.h+4&&paras()[t.i]&&paras()[t.i].trim());if(!it){if(SEL.size){SEL.clear();paintLines();draw();}return;}
+  SEL.has(it.i)?SEL.delete(it.i):SEL.add(it.i);paintLines();draw();});
+/* accent */
+function paintAcc(){$('accIn').value=accent().length===7?accent():'#1a1a1a';$('accV').textContent=S.acc?S.acc.toUpperCase():'THEME';}
+$('accIn').addEventListener('input',e=>{S.acc=e.target.value;paintAcc();draw();});
+$('accAuto').addEventListener('click',()=>{S.acc='';paintAcc();draw();toast('ACCENT FOLLOWS THEME');});
 
 /* ---------- export ---------- */
-function exportCanvas(){const D=SIZES[S.fmt],k=1080/D.w,c=document.createElement('canvas');c.width=1080;c.height=Math.round(D.h*k);render(c.getContext('2d'),k);return c;}
+function exportCanvas(noImg){const D=SIZES[S.fmt],k=1080/D.w,c=document.createElement('canvas');c.width=1080;c.height=Math.round(D.h*k);render(c.getContext('2d'),k,false,noImg);return c;}
+/* local file:// pages taint the canvas when images are drawn; fall back to a text-only render */
+function exportURL(){try{return[exportCanvas().toDataURL('image/png'),false];}catch(e){return[exportCanvas(true).toDataURL('image/png'),true];}}
 function fname(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `ARCH_LOG_${($('chara').value.trim()||'LOG').replace(/[\\/:*?"<>|]+/g,'_')}_${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}${p(d.getSeconds())}.png`;}
 $('saveBtn').addEventListener('click',async()=>{
   const b=$('saveBtn');b.classList.add('busy');await ensureFont();
-  try{const url=exportCanvas().toDataURL('image/png');const a=document.createElement('a');a.download=fname();a.href=url;document.body.appendChild(a);a.click();a.remove();toast('IMAGE SAVED');}
+  try{const[url,fb]=exportURL();const a=document.createElement('a');a.download=fname();a.href=url;document.body.appendChild(a);a.click();a.remove();toast(fb?'SAVED · LOCAL FILE, IMAGES OMITTED':'IMAGE SAVED');}
   catch(e){console.error(e);toast(location.protocol==='file:'?'SAVE BLOCKED · OPEN VIA WEB':'SAVE FAILED');}
   b.classList.remove('busy');
 });
 $('copyBtn').addEventListener('click',async()=>{
-  const b=$('copyBtn');b.classList.add('busy');await ensureFont();
+  const b=$('copyBtn');b.classList.add('busy');
   try{
     if(!window.ClipboardItem||!navigator.clipboard||!navigator.clipboard.write)throw new Error('unsupported');
-    const blob=await new Promise((res,rej)=>exportCanvas().toBlob(x=>x?res(x):rej(new Error('blob')),'image/png'));
+    /* hand the clipboard a promise right away so Safari keeps the user gesture */
+    const blob=(async()=>{await ensureFont();const[url]=exportURL();return await (await fetch(url)).blob();})();
     await navigator.clipboard.write([new ClipboardItem({'image/png':blob})]);toast('IMAGE COPIED');
-  }catch(e){toast('COPY UNSUPPORTED · USE SAVE');}
+  }catch(e){toast(location.protocol==='file:'?'COPY BLOCKED · OPEN VIA WEB':'COPY UNSUPPORTED · USE SAVE');}
   b.classList.remove('busy');
 });
 
@@ -401,12 +540,15 @@ async function ensureFont(){
 if(document.fonts&&document.fonts.addEventListener)document.fonts.addEventListener('loadingdone',draw);
 
 /* ---------- persist ---------- */
-let pT=0;function persist(){clearTimeout(pT);pT=setTimeout(()=>store.set('arch-log',{fmt:S.fmt,theme:S.theme,font:S.font,align:S.align,v:S.v,wrap:S.wrap,lh:S.lh,ls:S.ls,pad:S.pad,fs:S.fs,creator:$('creator').value,chara:$('chara').value}),300);}
+let pT=0;function persist(){clearTimeout(pT);pT=setTimeout(()=>store.set('arch-log',{acc:S.acc,fmt:S.fmt,theme:S.theme,font:S.font,align:S.align,v:S.v,wrap:S.wrap,lh:S.lh,ls:S.ls,pad:S.pad,fs:S.fs,creator:$('creator').value,chara:$('chara').value}),300);}
 (function restore(){const v=store.get('arch-log',null);if(!v)return;
-  ['theme','align','v','wrap'].forEach(k=>{if(v[k])S[k]=v[k];});
-  if(typeof v.fs==='number')S.fs=v.fs;
+  if(THEMES.some(t=>t.k===v.theme))S.theme=v.theme;
+  if(['left','center','right'].includes(v.align))S.align=v.align;if(['top','middle','bottom'].includes(v.v))S.v=v.v;if(['word','char'].includes(v.wrap))S.wrap=v.wrap;
+  if(typeof v.acc==='string'&&/^#[0-9a-f]{6}$/i.test(v.acc))S.acc=v.acc;
+  const cl=(k,x)=>typeof x==='number'&&isFinite(x)?Math.min(LIM[k][1],Math.max(LIM[k][0],x)):S[k];
+  S.fs=cl('fs',v.fs);
   if(Number.isInteger(v.font)&&FONTS[v.font])S.font=v.font;
-  if(typeof v.lh==='number')S.lh=v.lh;if(typeof v.ls==='number')S.ls=v.ls;if(typeof v.pad==='number')S.pad=v.pad;
+  S.lh=cl('lh',v.lh);S.ls=cl('ls',v.ls);S.pad=cl('pad',v.pad);
   if(typeof v.creator==='string')$('creator').value=v.creator;if(typeof v.chara==='string')$('chara').value=v.chara;
 })();
 
@@ -416,7 +558,7 @@ const pad=n=>String(n).padStart(2,'0');
 function tick(){const d=new Date();$('clock').textContent=`${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;}
 setInterval(tick,1000);tick();
 window.addEventListener('resize',draw);
-paintUI();
+paintUI();paintLines();paintAcc();
 (document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(r=>setTimeout(r,1500))]):Promise.resolve()).then(()=>{ensureFont();setTimeout(()=>{$('boot').classList.add('off');setTimeout(()=>$('boot').remove(),700);},450);});
 </script>
 </body>
