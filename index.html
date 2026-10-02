@@ -410,7 +410,9 @@ function draw(){cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{
   const D=SIZES[S.fmt],k=Math.min(3,Math.max(1.5,(devicePixelRatio||1)*Math.max(1,cv.clientWidth/D.w)));
   const W=Math.round(D.w*k),H=Math.round(D.h*k);if(cv.width!==W||cv.height!==H){cv.width=W;cv.height=H;}
   const L=render(ctx,k,true);LAST_L=L;
-  $('warn').classList.toggle('on',L.total>L.avail+1);
+  const over=L.total>L.avail+1,hitLogo=!over&&L.y0+L.total>L.D.h-128&&(S.align!=='left'||L.items.some(it=>['bubR','box','rule'].includes(it.st)));
+  $('warn').textContent=over?'글이 카드에 다 들어가지 않아 아래가 잘렸어요. ‘카드에 맞추기’를 누르거나 글자 크기·여백을 줄여 보세요.':'마지막 줄이 오른쪽 아래 로고와 겹칠 수 있어요. 세로 위치를 ‘위’로 하거나 여백을 늘려 보세요.';
+  $('warn').classList.toggle('on',over||hitLogo);
   const t=$('txt').value;$('cnt').textContent=`${t.replace(/\s/g,'').length}자 · ${t?t.split('\n').length:0}줄`;
   persist();
 });}
